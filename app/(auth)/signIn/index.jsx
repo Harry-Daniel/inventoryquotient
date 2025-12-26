@@ -1,14 +1,16 @@
+import { useLocalSearchParams } from "expo-router";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 const { width, height } = Dimensions.get("screen");
-
 const SignIn = () => {
+  const { params } = useLocalSearchParams();
+
   return (
     <View
-      classname="justify-center items-center"
+      className="justify-center items-center p-4 gap-4"
       style={{ width: width, height: height }}
     >
-      <Text>SignIn</Text>
+      <Text>Sign In</Text>
     </View>
   );
 };
