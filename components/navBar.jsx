@@ -4,9 +4,9 @@ import { usePathname, useRouter } from "expo-router";
 const { width, height } = Dimensions.get("screen");
 const NavBar = () => {
   // custom colours
-  const navbarWhite = "#ccc9c9";
-  const navbarWhiteNativewind = "text-[#ccc9c9]";
-  const navbarGray = "#374151";
+  const navbarSecondaryColor = "#ccc9c9";
+  const navbarSecondaryColorNativewind = "text-[#ccc9c9]";
+  const navbarPrimaryColor = "#374151";
 
   const pathname = usePathname();
   const router = useRouter();
@@ -25,23 +25,28 @@ const NavBar = () => {
   // Path Checks
   const whiteBgCheckPath = (pagePathname) =>
     pathname === pagePathname
-      ? "absolute bg-white scale-[2] h-[90%] -top-2  w-[110%] m-auto p-auto -z-10 rounded-full"
+      ? "absolute bg-white h-[90%] w-[110%] rounded-full -z-10"
       : "hidden";
 
   const iconCheckPath = (pagePathname) =>
-    pathname === pagePathname ? `${navbarGray}` : `${navbarWhite}`;
+    pathname === pagePathname
+      ? `${navbarPrimaryColor}`
+      : `${navbarSecondaryColor}`;
 
   const textCheckPath = (pagePathname) =>
-    `${pathname === pagePathname ? "text-gray-700" : `${navbarWhiteNativewind}`} text-xs`;
+    `${pathname === pagePathname ? "text-gray-700" : `${navbarSecondaryColorNativewind}`} text-xs`;
 
   return (
     <View className="items-center">
       <View
-        className={`absolute bottom-16 flex-row justify-around items-center ${navbarWhiteNativewind} bg-gray-700 border border-white py-4 px-5 rounded-full gap-4 shadow-2xl`}
+        className={`absolute bottom-16 flex-row justify-around items-center ${navbarSecondaryColorNativewind} bg-gray-700 border border-white py-4 px-5 rounded-full gap-4 shadow-2xl`}
         style={{ maxWidth: width, minWidth: width * 0.4 }}
       >
         <View className="relative">
-          <View className={whiteBgCheckPath(homePathname)}></View>
+          <View
+            className={whiteBgCheckPath(homePathname)}
+            style={{ transform: [{ scale: 2 }], top: -8 }}
+          ></View>
           <TouchableOpacity
             onPress={() => handlePress("/")}
             className="justify-center items-center gap-1 "
@@ -55,7 +60,10 @@ const NavBar = () => {
           </TouchableOpacity>
         </View>
         <View className={`relative`}>
-          <View className={whiteBgCheckPath(profilePathname)}></View>
+          <View
+            className={whiteBgCheckPath(profilePathname)}
+            style={{ transform: [{ scale: 2 }], top: -8 }}
+          ></View>
           <TouchableOpacity
             onPress={() => handlePress("/profile")}
             className="justify-center items-center gap-1"
