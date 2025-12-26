@@ -1,11 +1,9 @@
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { usePathname, useRouter } from "expo-router";
-import { useState } from "react";
+import { BACKEND } from "../constants";
 const { width, height } = Dimensions.get("screen");
 const NavBar = () => {
-
-  const [isAutenticated, setIsAuthenticated] = useState(false)
   // custom colours
   const navbarSecondaryColor = "#ccc9c9";
   const navbarSecondaryColorNativewind = "text-[#ccc9c9]";
@@ -39,10 +37,9 @@ const NavBar = () => {
   const textCheckPath = (pagePathname) =>
     `${pathname === pagePathname ? "text-gray-700" : `${navbarSecondaryColorNativewind}`} text-xs`;
 
-
   // returning null to remove navBar if user is not auhenticated
-  if (isAutenticated===false){
-    return null
+  if (BACKEND.authenticated === false) {
+    return null;
   }
 
   return (
