@@ -1,18 +1,16 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useState } from "react";
 import {
-  Dimensions,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  Touchable,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    ImageBackground,
+    Pressable,
+    StyleSheet,
+    Switch,
+    Text,
+    TextInput,
+    View
 } from "react-native";
 import { IMAGES } from "../../../constants";
-import { useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
 const SignIn = () => {
