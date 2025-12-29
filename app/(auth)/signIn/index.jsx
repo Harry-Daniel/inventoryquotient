@@ -16,21 +16,43 @@ import { useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
 const SignIn = () => {
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
   const [hidePassword, setHidePassword] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState([]);
 
   // simulating on submit
+
   const handleOnSubmit = () => {
-    setErrors([]);
-    if (isChecked) {
-      console.log("submitted");
-    } else {
-      setErrors((errors) => [
-        ...errors,
-        "You need to agree to processing of your data",
-      ]);
+    const validationErrors = [];
+
+    if (
+      userDetails.fullname.length < 1 ||
+      userDetails.password.length < 1 ||
+      userDetails.email.length < 1
+    ) {
+      validationErrors.push("Leave no field empty");
+    }
+
+    if (
+      userDetails.email.length > 0 &&
+      (!userDetails.email.includes("@") || !userDetails.email.includes("."))
+    ) {
+      validationErrors.push("Provide a proper email");
+    }
+
+    if (!isChecked) {
+      validationErrors.push("You need to agree to processing of your data");
+    }
+
+    setErrors(validationErrors);
+
+    if (validationErrors.length === 0) {
+      console.log(userDetails);
     }
   };
 
@@ -52,6 +74,9 @@ const SignIn = () => {
               <Text className="text-xs">Fullname</Text>
             </View>
             <TextInput
+              onChangeText={(text) =>
+                setUserDetails((prev) => ({ ...prev, fullname: text }))
+              }
               placeholder="Enter full name"
               keyboardType="default"
               autoCapitalize="words"
@@ -67,6 +92,10 @@ const SignIn = () => {
               <Text className="text-xs">Email</Text>
             </View>
             <TextInput
+              value={userDetails.email}
+              onChangeText={(text) =>
+                setUserDetails((prev) => ({ ...prev, email: text }))
+              }
               placeholder="Enter email address"
               keyboardType="email-address"
               autoCapitalize="none"
@@ -82,6 +111,9 @@ const SignIn = () => {
             </View>
             <View className="flex flex-row relative">
               <TextInput
+                onChangeText={(text) =>
+                  setUserDetails((prev) => ({ ...prev, password: text }))
+                }
                 placeholder="Enter password"
                 secureTextEntry={hidePassword}
                 autoCapitalize="none"
