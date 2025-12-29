@@ -1,21 +1,20 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import {
-    Dimensions,
-    ImageBackground,
-    Pressable,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    View
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const SignIn = () => {
   const [userDetails, setUserDetails] = useState({
-    fullname: "",
     email: "",
     password: "",
   });
@@ -28,11 +27,7 @@ const SignIn = () => {
   const handleOnSubmit = () => {
     const validationErrors = [];
 
-    if (
-      userDetails.fullname.length < 1 ||
-      userDetails.password.length < 1 ||
-      userDetails.email.length < 1
-    ) {
+    if (userDetails.password.length < 1 || userDetails.email.length < 1) {
       validationErrors.push("Leave no field empty");
     }
 
@@ -41,10 +36,6 @@ const SignIn = () => {
       (!userDetails.email.includes("@") || !userDetails.email.includes("."))
     ) {
       validationErrors.push("Provide a proper email");
-    }
-
-    if (!isChecked) {
-      validationErrors.push("You need to agree to processing of your data");
     }
 
     setErrors(validationErrors);
@@ -60,30 +51,12 @@ const SignIn = () => {
       style={{ width: width, height: height }}
       source={IMAGES.authBg}
     >
-      <View className="flex-1 bg-white w-[100%] h-[70%] rounded-t-[3rem] p-6 gap-12 translate-y-40">
+      <View className="flex-1 bg-white w-[100%] h-[70%] rounded-t-[3rem] p-6 gap-12 translate-y-72">
         <Text className=" mx-auto my-4 text-blue-900 text-2xl font-semibold">
-          Get Started
+          Welcome Back
         </Text>
         {/* form fields */}
         <View className="flex gap-8">
-          {/* fullname */}
-          <View className="relative">
-            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
-              <Text className="text-xs">Fullname</Text>
-            </View>
-            <TextInput
-              onChangeText={(text) =>
-                setUserDetails((prev) => ({ ...prev, fullname: text }))
-              }
-              placeholder="Enter full name"
-              keyboardType="default"
-              autoCapitalize="words"
-              autoCorrect={false}
-              textContentType="name"
-              returnKeyType="next"
-              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
-            />
-          </View>
           {/* Email */}
           <View className="relative">
             <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
@@ -139,14 +112,19 @@ const SignIn = () => {
             </View>
           </View>
           {/* Agree to terms and Conditions */}
-          <View className=" flex justify-start flex-row items-center -my-5">
-            <Switch
-              value={isChecked}
-              onValueChange={() => setIsChecked(!isChecked)}
-            />
-            <Text className="text-sm text-blue-900">
-              I agree to the processing of the Provided data
-            </Text>
+          <View className="flex flex-row justify-between">
+            <View className=" flex justify-start flex-row items-center -my-5">
+              <Switch
+                value={isChecked}
+                onValueChange={() => setIsChecked(!isChecked)}
+              />
+              <Text className="text-sm text-blue-900">Remember Me</Text>
+            </View>
+            <Pressable>
+              <Text className="text-sm text-blue-900 active:scale-95">
+                Forgot Password?
+              </Text>
+            </Pressable>
           </View>
         </View>
 
@@ -154,8 +132,14 @@ const SignIn = () => {
           className="bg-blue-900 active:scale-[0.99] p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
-          <Text className="text-white m-auto">Sign Up</Text>
+          <Text className="text-white m-auto">Sign In</Text>
         </Pressable>
+        <View className="mx-auto flex flex-row gap-2 -my-5">
+          <Text> Don't have an account?</Text>
+          <Pressable>
+            <Text className="text-blue-900 active:scale-95">Sign Up</Text>
+          </Pressable>
+        </View>
         <View className="flex gap-2">
           {errors.length > 0 &&
             errors.map((error, index) => (
