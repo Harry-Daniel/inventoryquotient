@@ -8,7 +8,7 @@ import {
   Switch,
   Text,
   TextInput,
-  View
+  View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
 
@@ -156,6 +156,12 @@ const SignUp = () => {
         >
           <Text className="text-white m-auto">Sign Up</Text>
         </Pressable>
+        <View className="mx-auto flex flex-row gap-2 -my-5">
+          <Text> Already have an account?</Text>
+          <Pressable>
+            <Text className="text-blue-900 active:scale-95">Sign In</Text>
+          </Pressable>
+        </View>
         <View className="flex gap-2">
           {errors.length > 0 &&
             errors.map((error, index) => (
