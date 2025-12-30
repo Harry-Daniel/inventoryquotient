@@ -142,8 +142,11 @@ const SignIn = () => {
         </Pressable>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Don't have an account?</Text>
-          <Pressable onPress={() => router.push({ pathname: "/signUp" })}>
-            <Text className="text-blue-900 active:scale-95">Sign Up</Text>
+          <Pressable
+            onPress={() => router.replace({ pathname: "/signUp" })}
+            className="active:scale-95"
+          >
+            <Text className="text-blue-900 ">Sign Up</Text>
           </Pressable>
         </View>
         <View className="flex gap-2">
