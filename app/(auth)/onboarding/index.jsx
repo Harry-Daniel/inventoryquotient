@@ -13,13 +13,9 @@ const { width, height } = Dimensions.get("screen");
 const Onboarding = () => {
   const router = useRouter();
 
-  const onPressSignIn = () => {
-    router.replace({ pathname: "/signIn" });
-  };
+  const onPressSignIn = () => router.replace({ pathname: "/signIn" });
 
-  const onPressSignUp = () => {
-    router.replace({ pathname: "/signUp" });
-  };
+  const onPressSignUp = () => router.replace({ pathname: "/signUp" });
 
   return (
     <ImageBackground
