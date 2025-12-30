@@ -11,9 +11,14 @@ import {
   View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
+import { useRouter } from "expo-router";
+import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const SignUp = () => {
+  const { login } = useAuthetication;
+  const router = useRouter();
+
   const [userDetails, setUserDetails] = useState({
     fullname: "",
     email: "",
@@ -51,6 +56,7 @@ const SignUp = () => {
 
     if (validationErrors.length === 0) {
       console.log(userDetails);
+      router.replace({ pathname: "/signIn" });
     }
   };
 
@@ -158,8 +164,11 @@ const SignUp = () => {
         </Pressable>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
-          <Pressable>
-            <Text className="text-blue-900 active:scale-95">Sign In</Text>
+          <Pressable
+            className="active:scale-95"
+            onPress={() => router.replace({ pathname: "/signIn" })}
+          >
+            <Text className="text-blue-900 ">Sign In</Text>
           </Pressable>
         </View>
         <View className="flex gap-2">
