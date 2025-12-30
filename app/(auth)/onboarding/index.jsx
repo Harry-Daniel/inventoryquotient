@@ -14,11 +14,11 @@ const Onboarding = () => {
   const router = useRouter();
 
   const onPressSignIn = () => {
-    router.push({ pathname: "/signIn" });
+    router.replace({ pathname: "/signIn" });
   };
 
   const onPressSignUp = () => {
-    router.push({ pathname: "/signUp" });
+    router.replace({ pathname: "/signUp" });
   };
 
   return (
