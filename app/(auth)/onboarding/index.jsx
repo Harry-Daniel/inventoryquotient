@@ -1,19 +1,26 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useState } from "react";
 import {
   Dimensions,
   ImageBackground,
   Pressable,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
   View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
+import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const Onboarding = () => {
+  const router = useRouter();
+
+  const onPressSignIn = () => {
+    router.push({ pathname: "/signIn" });
+  };
+
+  const onPressSignUp = () => {
+    router.push({ pathname: "/signUp" });
+  };
+
   return (
     <ImageBackground
       className="justify-between items-center p-12"
@@ -30,10 +37,16 @@ const Onboarding = () => {
       </View>
 
       <View className="flex flex-row mb-[20%] gap-4">
-        <Pressable className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]">
+        <Pressable
+          className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]"
+          onPress={onPressSignIn}
+        >
           <Text className="text-white m-auto">Sign In</Text>
         </Pressable>
-        <Pressable className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]">
+        <Pressable
+          className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]"
+          onPress={onPressSignUp}
+        >
           <Text className="text-white m-auto">Sign Up</Text>
         </Pressable>
       </View>
