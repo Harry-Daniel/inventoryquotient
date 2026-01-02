@@ -15,7 +15,7 @@ const Categories = () => {
       {catergoriesList.map(({ title, id }) => (
         <Pressable onPress={() => setSelectedCategory(id)} key={id}>
           <Text
-            className={`${selectedCategory === id ? "text-blue-500 border-b-blue-500 border-b-[0.5px]" : "text-blue-200"} text-sm `}
+            className={`${selectedCategory === id ? "text-blue-500 border-b-blue-500 border-b-[0.5px]" : "text-blue-300"} text-sm `}
           >
             {title}
           </Text>
