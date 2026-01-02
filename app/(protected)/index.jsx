@@ -1,21 +1,16 @@
 import {
   Dimensions,
-  Image,
-  Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
-  View,
+  View
 } from "react-native";
 import Categories from "../../components/categories";
-import { IMAGES } from "../../constants";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import InventoryCard from "../../components/inventoryCard";
 const { width, height } = Dimensions.get("screen");
 
 // Note: In app.js , change the "scheme" to match your project name.
 const Home = () => {
+  const inventoryList=[1,2,3,4]
   return (
     <View style={{ width: width, height: height }}>
       <ScrollView
@@ -26,7 +21,7 @@ const Home = () => {
           <View className="h-[30vh] w-[100vw] bg-black "></View>
 
           <Categories />
-          <InventoryCard />
+          <InventoryCard items={inventoryList} />
         </View>
       </ScrollView>
     </View>
