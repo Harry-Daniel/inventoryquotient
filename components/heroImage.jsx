@@ -1,4 +1,5 @@
 import {
+  Image,
   ImageBackground,
   Pressable,
   StyleSheet,
@@ -16,6 +17,9 @@ const HeroImage = () => {
       alt="hero images"
     >
       <View className="flex h-full w-full justify-center items-center bg-[#00000055]">
+        <View className="bg-[#ffffff50]  flex justify-center items-center rounded-md">
+            <Image source={IMAGES.logo} className="w-4 h-4" />
+        </View>
         <Text className="text-white font-bold text-3xl">
           Inventory made Easy{" "}
         </Text>
