@@ -8,8 +8,9 @@ const NavBar = () => {
   const { authenticated } = useAuthetication();
   // custom colours
   const navbarSecondaryColor = "#ccc9c9";
-  const navbarSecondaryColorNativewind = "text-[#ccc9c9]";
-  const navbarPrimaryColor = "#374151";
+  const navbarSecondaryTextColorNativewind = "text-[#ccc9c9]";
+  const navbarPrimaryColor = "#172554";
+  const navbarPrimaryTextColorNativewind = "text-[#172554]";
 
   const pathname = usePathname();
   const router = useRouter();
@@ -28,7 +29,7 @@ const NavBar = () => {
   // Path Checks
   const whiteBgCheckPath = (pagePathname) =>
     pathname === pagePathname
-      ? "absolute bg-white h-[90%] w-[110%] rounded-full -z-10"
+      ? "absolute bg-[#f3f4f6] h-[90%] w-[110%] rounded-full -z-10"
       : "hidden";
 
   const iconCheckPath = (pagePathname) =>
@@ -37,7 +38,7 @@ const NavBar = () => {
       : `${navbarSecondaryColor}`;
 
   const textCheckPath = (pagePathname) =>
-    `${pathname === pagePathname ? "text-gray-700" : `${navbarSecondaryColorNativewind}`} text-xs`;
+    `${pathname === pagePathname ? `${navbarPrimaryTextColorNativewind}` : `${navbarSecondaryTextColorNativewind}`} text-xs`;
 
   // returning null to remove navBar if user is not auhenticated
   if (authenticated === false) {
@@ -47,7 +48,7 @@ const NavBar = () => {
   return (
     <View className="items-center">
       <View
-        className={`absolute bottom-16 flex-row justify-around items-center ${navbarSecondaryColorNativewind} bg-gray-700 border border-white py-4 px-5 rounded-full gap-4 shadow-2xl`}
+        className={`absolute bottom-16 flex-row justify-around items-center ${navbarSecondaryTextColorNativewind} bg-blue-950  border border-gray-100 py-4 px-5 rounded-full gap-4 shadow-2xl`}
         style={{ maxWidth: width, minWidth: width * 0.4 }}
       >
         <View className="relative">
