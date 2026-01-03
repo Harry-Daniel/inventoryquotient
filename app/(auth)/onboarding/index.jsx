@@ -27,7 +27,7 @@ const Onboarding = () => {
       <View className="flex flex-col justify-center items-center absolute top-[30%] gap-2 ">
         <View className="   justify-center items-center p-4 rounded-2xl shadow-2xl shadow-black elevation-10">
           <Image
-            source={require("../../../assets/logo.png")}
+            source={IMAGES.logo}
             className="w-48 h-48"
             resizeMode="contain"
           />
