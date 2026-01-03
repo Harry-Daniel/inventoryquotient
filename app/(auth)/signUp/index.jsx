@@ -55,7 +55,6 @@ const SignUp = () => {
     setErrors(validationErrors);
 
     if (validationErrors.length === 0) {
-      console.log(userDetails);
       router.replace({ pathname: "/signIn" });
     }
   };
