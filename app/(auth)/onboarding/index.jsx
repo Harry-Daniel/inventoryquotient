@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   ImageBackground,
   Pressable,
   StyleSheet,
@@ -19,20 +20,30 @@ const Onboarding = () => {
 
   return (
     <ImageBackground
-      className="justify-between items-center p-12"
+      className=" items-center p-12 relative"
       style={{ width: width, height: height }}
       source={IMAGES.authBg}
     >
-      <View>
-        <Text className=" mx-auto  text-blue-900 text-4xl font-semibold mt-[20%]">
-          Welcome Back
-        </Text>
-        <Text className=" mx-auto  text-blue-900 text-lg font-medium">
-          Inventory made simple.
-        </Text>
+      <View className="flex flex-col justify-center items-center absolute top-[30%] gap-2 ">
+        <View className="   justify-center items-center p-4 rounded-2xl shadow-2xl shadow-black elevation-10">
+          <Image
+            source={require("../../../assets/logo.png")}
+            className="w-48 h-48"
+            resizeMode="contain"
+          />
+        </View>
+
+        <View>
+          <Text className=" mx-auto  text-blue-900 text-4xl font-bold">
+            Inventory Quotient
+          </Text>
+          <Text className=" mx-auto  text-blue-900 text-lg font-medium tracking-widest">
+            Inventory made simple.
+          </Text>
+        </View>
       </View>
 
-      <View className="flex flex-row mb-[20%] gap-4">
+      <View className="flex flex-row gap-4 absolute bottom-16">
         <Pressable
           className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]"
           onPress={onPressSignIn}
