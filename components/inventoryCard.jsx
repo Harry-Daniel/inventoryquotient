@@ -16,7 +16,7 @@ const InventoryCard = ({ items }) => {
             className={`${index % 2 == 0 ? "rounded-l-xl" : "rounded-r-xl"} h-full w-[40%] `}
           />
 
-          <View className="flex-col p-2  w-[60%] overflow-hidden gap-2">
+          <View className="flex-col py-2 px-4  w-[60%] overflow-hidden gap-2">
             <View>
               <Text className="text-blue-100 text-lg font-bold ">Tomatoes</Text>
               <View className="bg-blue-100 flex flex-row justify-center items-center rounded-md gap-2 px-2 self-start">
