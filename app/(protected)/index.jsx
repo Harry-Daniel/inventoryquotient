@@ -15,20 +15,17 @@ const { width, height } = Dimensions.get("screen");
 
 // Note: In app.js , change the "scheme" to match your project name.
 const Home = () => {
-  const inventoryList = [1, 2, 3, 4];
+  const inventoryList = [1, 2, 3, 4,5,6];
   return (
     <View style={{ width: width, height: height }}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View className="flex flex-col my-16 gap-4 bg-gray-100 h-[100vh]">
+   
+        <View className="flex flex-col my-16 mb-24 gap-4 bg-gray-100 h-[100vh]">
           <HeroImage />
 
-          <Categories />
+        <Categories />
           <InventoryCard items={inventoryList} />
         </View>
-      </ScrollView>
+    
     </View>
   );
 };
