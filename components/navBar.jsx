@@ -48,7 +48,7 @@ const NavBar = () => {
   return (
     <View className="items-center">
       <View
-        className={`absolute bottom-16 flex-row justify-around items-center ${navbarSecondaryTextColorNativewind} bg-blue-950  border border-gray-100 py-4 px-5 rounded-full gap-4 shadow-2xl`}
+        className={`absolute bottom-2 flex-row justify-around items-center ${navbarSecondaryTextColorNativewind} bg-blue-950  border border-gray-100 py-2 px-5 rounded-full gap-4 shadow-2xl z-10`}
         style={{ maxWidth: width, minWidth: width * 0.4 }}
       >
         <View className="relative">
