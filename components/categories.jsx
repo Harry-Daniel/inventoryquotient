@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState(1);
@@ -13,13 +13,13 @@ const Categories = () => {
   return (
     <View className="flex flex-row gap-2 justify-center items-center">
       {catergoriesList.map(({ title, id }) => (
-        <Pressable onPress={() => setSelectedCategory(id)} key={id}>
+        <TouchableOpacity onPress={() => setSelectedCategory(id)} key={id}>
           <Text
             className={`${selectedCategory === id ? "text-blue-500 border-b-blue-500 border-b-[0.5px]" : "text-blue-300"} text-sm `}
           >
             {title}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       ))}
     </View>
   );

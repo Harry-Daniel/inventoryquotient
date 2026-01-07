@@ -1,17 +1,17 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Dimensions,
   ImageBackground,
-  Pressable,
   StyleSheet,
   Switch,
   Text,
   TextInput,
-  View,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { IMAGES } from "../../../constants";
-import { useRouter } from "expo-router";
 import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
@@ -155,20 +155,20 @@ const SignUp = () => {
           </View>
         </View>
 
-        <Pressable
-          className="bg-blue-900 active:scale-[0.99] p-4  rounded-3xl"
+        <TouchableOpacity
+          className="bg-blue-900  p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
           <Text className="text-white m-auto">Sign Up</Text>
-        </Pressable>
+        </TouchableOpacity>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
-          <Pressable
-            className="active:scale-95"
+          <TouchableOpacity
+          
             onPress={() => router.replace({ pathname: "/signIn" })}
           >
             <Text className="text-blue-900 ">Sign In</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <View className="flex gap-2">
           {errors.length > 0 &&

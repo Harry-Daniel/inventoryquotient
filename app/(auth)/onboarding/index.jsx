@@ -1,14 +1,14 @@
+import { useRouter } from "expo-router";
 import {
   Dimensions,
   Image,
   ImageBackground,
-  Pressable,
   StyleSheet,
   Text,
-  View,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { IMAGES } from "../../../constants";
-import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const Onboarding = () => {
@@ -44,18 +44,18 @@ const Onboarding = () => {
       </View>
 
       <View className="flex flex-row gap-4 absolute bottom-16">
-        <Pressable
-          className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]"
+        <TouchableOpacity
+          className="bg-blue-900  p-4  rounded-3xl w-[45%]"
           onPress={onPressSignIn}
         >
           <Text className="text-white m-auto">Sign In</Text>
-        </Pressable>
-        <Pressable
-          className="bg-blue-900 active:scale-[0.97] p-4  rounded-3xl w-[45%]"
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-blue-900  p-4  rounded-3xl w-[45%]"
           onPress={onPressSignUp}
         >
           <Text className="text-white m-auto">Sign Up</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );

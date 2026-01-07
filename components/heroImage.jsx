@@ -1,12 +1,11 @@
 import {
   Image,
   ImageBackground,
-  Pressable,
   StyleSheet,
   Text,
-  View,
+  TouchableOpacity,
+  View
 } from "react-native";
-import React from "react";
 import { IMAGES } from "../constants";
 
 const HeroImage = () => {
@@ -18,7 +17,7 @@ const HeroImage = () => {
     >
       <View className="flex h-full w-full justify-center items-center bg-[#00000055]">
         <View className="bg-[#ffffff50]  flex justify-center items-center rounded-md">
-            <Image source={IMAGES.logo} className="w-4 h-4" />
+          <Image source={IMAGES.logo} className="w-4 h-4" />
         </View>
         <Text className="text-white font-bold text-3xl">
           Inventory made Easy{" "}
@@ -27,9 +26,9 @@ const HeroImage = () => {
           Do you keep forgetting what you own just to end up buying more? Trust
           us to have your back!
         </Text>
-        <Pressable className="bg-blue-200 px-2 py-1 rounded-2xl my-2 absolute bottom-8 w-32 justify-center items-center h-10 active:scale-90">
+        <TouchableOpacity className="bg-blue-200 px-2 py-1 rounded-2xl my-2 absolute bottom-8 w-32 justify-center items-center h-10 ">
           <Text className="font-semibold text-gray-800 ">Add item</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
