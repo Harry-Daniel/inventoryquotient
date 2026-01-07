@@ -1,16 +1,11 @@
 import {
   Dimensions,
-  Image,
-  ImageBackground,
-  ScrollView,
   StyleSheet,
-  Text,
-  View,
+  View
 } from "react-native";
 import Categories from "../../components/categories";
-import InventoryCard from "../../components/inventoryCard";
-import { IMAGES } from "../../constants";
 import HeroImage from "../../components/heroImage";
+import InventoryCard from "../../components/inventoryCard";
 const { width, height } = Dimensions.get("screen");
 
 // Note: In app.js , change the "scheme" to match your project name.
