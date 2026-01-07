@@ -1,26 +1,20 @@
-import {
-  Dimensions,
-  StyleSheet,
-  View
-} from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Categories from "../../components/categories";
 import HeroImage from "../../components/heroImage";
-import InventoryCard from "../../components/inventoryCard";
+import InventoryList from "../../components/InventoryList";
 const { width, height } = Dimensions.get("screen");
 
 // Note: In app.js , change the "scheme" to match your project name.
 const Home = () => {
-  const inventoryList = [1, 2, 3, 4, 5, 6];
   return (
     <View style={{ width: width, height: height }}>
       <View className="flex flex-col my-16 gap-4 bg-gray-100 h-[100vh]">
         <HeroImage />
 
         <Categories />
-        <View className="w-auto h-[52vh]">
 
-        <InventoryCard items={inventoryList} />
-        </View>
+        <InventoryList/>
+        
       </View>
     </View>
   );
