@@ -1,5 +1,7 @@
 import { Slot, Redirect } from "expo-router";
 import { useAuthetication } from "../../store/store";
+import { StyleSheet, Text, View } from "react-native";
+import NavBar from "../../components/navBar";
 
 export default function ProtectedLayout() {
   const { authenticated } = useAuthetication();
@@ -7,5 +9,12 @@ export default function ProtectedLayout() {
     return <Redirect href="/onboarding" />;
   }
 
-  return <Slot />;
+  return (
+    <View>
+      <View className="flex-1">
+        <Slot />
+        <NavBar />
+      </View>
+    </View>
+  );
 }
