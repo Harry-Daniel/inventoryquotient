@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get("screen");
 const ItemDetail = () => {
   return (
     <ImageBackground
-      source={IMAGES.authBg}
+      source={IMAGES.CardDetailBg}
       style={{ width: width, height: height }}
     >
       <View className="flex flex-col my-16 gap-4  h-[100vh]">
