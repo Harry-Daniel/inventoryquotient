@@ -20,12 +20,18 @@ const ItemDetail = () => {
           <Image
             source={IMAGES.hero}
             alt="Item Image"
-            className="w-[85%] h-full rounded-[4rem] z-10"
+            className="w-[90%] h-full rounded-[4rem] z-10"
           />
-          <View className=" absolute z-[9] top-[1px] w-[85%] h-full bg-white rounded-[4rem]"></View>
-          <View className=" absolute z-[8] top-4 w-[85%] h-full bg-[#8eb1c5] rounded-[5rem]"></View>
+          <View className=" absolute z-[9] top-[1px] w-[90%] h-full bg-white rounded-[4rem]"></View>
+          <View className=" absolute z-[8] top-4 w-[90%] h-full bg-[#2b2e30] rounded-[5rem]"></View>
         </View>
-        <Text>Hello World</Text>
+        <View className=" w-full mt-6 px-[5%]">
+          <View className="bg-blue-300 px-4 py-2 flex self-start rounded-full min-w-[40%]">
+            <Text className="text-lg font-bold text-center text-[#010c30]">
+              Tomatoes
+            </Text>
+          </View>
+        </View>
       </View>
     </ImageBackground>
   );
