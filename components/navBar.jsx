@@ -5,7 +5,7 @@ import { useAuthetication } from "../store/store";
 const { width, height } = Dimensions.get("screen");
 const NavBar = () => {
   // Global Staes from Zustand
-  const { authenticated } = useAuthetication();
+ 
   // custom colours
   const navbarSecondaryColor = "#ccc9c9";
   const navbarSecondaryTextColorNativewind = "text-[#ccc9c9]";
@@ -41,9 +41,6 @@ const NavBar = () => {
     `${pathname === pagePathname ? `${navbarPrimaryTextColorNativewind}` : `${navbarSecondaryTextColorNativewind}`} text-xs`;
 
   // returning null to remove navBar if user is not auhenticated
-  if (authenticated === false) {
-    return null;
-  }
 
   return (
     <View className="items-center">
