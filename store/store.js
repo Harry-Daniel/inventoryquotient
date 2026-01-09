@@ -8,5 +8,10 @@ export const useAuthetication = create((set) => ({
 
 export const useData = create((set) => ({
   inventoryItems: [],
+  indexedList:[],
   setInventoryItems: (data) => set({ inventoryItems: data }),
+  setIndexedList: (newItems) =>
+    set({
+      indexedList: Object.fromEntries(newItems.map((i) => [i.id, i])),
+    }),
 }));

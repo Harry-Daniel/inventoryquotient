@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useData } from "../store/store";
 
 const InventoryList = () => {
-  const { setInventoryItems, inventoryItems } = useData();
+  const { setInventoryItems, inventoryItems, setIndexedList } = useData();
   const [isloading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ const InventoryList = () => {
 
         const data = await response.json();
         setInventoryItems(data);
+        setIndexedList(data);
       } catch (error) {
         console.error("fetch failed", error);
       }
