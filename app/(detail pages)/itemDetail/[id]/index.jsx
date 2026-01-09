@@ -9,9 +9,13 @@ import {
 } from "react-native";
 import { IMAGES } from "../../../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const ItemDetail = () => {
+  const { id } = useLocalSearchParams();
+  console.log(id);
+
   return (
     <ImageBackground
       source={IMAGES.CardDetailBg}
@@ -46,7 +50,9 @@ const ItemDetail = () => {
           </Text>
 
           <TouchableOpacity className="bg-blue-300 absolute bottom-40 rounded-full left-[7%] w-full px-4 py-4">
-            <Text className="text-center font-semibold text-blue-950">Add to Restock List</Text>
+            <Text className="text-center font-semibold text-blue-950">
+              Add to Restock List
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
