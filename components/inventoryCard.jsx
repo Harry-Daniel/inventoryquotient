@@ -6,9 +6,10 @@ import { useRouter } from "expo-router";
 
 const InventoryCard = ({ items }) => {
   const router = useRouter();
+  const shortenDescription = (text) =>
+    text.length > 30 ? text.slice(0, 30) + "..." : text;
 
   const renderItem = ({ item }) => (
-
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => router.push(`/itemDetail/${item.id}`)}
@@ -23,21 +24,17 @@ const InventoryCard = ({ items }) => {
 
         <View className="flex-col py-2 px-4 w-[60%] gap-2">
           {/* Hard-coded name */}
-          <Text className="text-blue-100 text-lg font-bold">
-            Tomatoes
-          </Text>
+          <Text className="text-blue-100 text-lg font-bold">Tomatoes</Text>
 
           {/* Hard-coded quantity */}
           <View className="bg-blue-100 flex-row items-center rounded-md px-2 self-start gap-1">
             <MaterialIcons name="inventory" size={10} color="#1e40af" />
-            <Text className="text-blue-800 text-xs font-bold">
-              10
-            </Text>
+            <Text className="text-blue-800 text-xs font-bold">10</Text>
           </View>
 
           {/* Hard-coded location */}
           <Text className="text-blue-200 text-sm">
-            Inside the little cupboard to the left
+            {shortenDescription("Inside the little cupboard to the left")}
           </Text>
         </View>
       </View>
