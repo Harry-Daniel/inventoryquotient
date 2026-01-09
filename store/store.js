@@ -5,3 +5,8 @@ export const useAuthetication = create((set) => ({
   login: () => set({ authenticated: true }),
   logout: () => set({ authenticated: false }),
 }));
+
+export const useData = create((set) => ({
+  inventoryItems: [],
+  setInventoryItems: (data) => set({ inventoryItems: data }),
+}));
