@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
 import InventoryCard from "./inventoryCard";
 import { useEffect, useState } from "react";
+import { useData } from "../store/store";
 
 const InventoryList = () => {
-  const [inventoryItems, setInventoryItems] = useState([]);
+  const { setInventoryItems, inventoryItems } = useData();
   const [isloading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const InventoryList = () => {
     getItems();
   }, []);
 
-  if (isloading) {
+  if (isloading && inventoryItems.length < 1) {
     return <Text className="text-center text-blue-950">Loading...</Text>;
   }
   return (
