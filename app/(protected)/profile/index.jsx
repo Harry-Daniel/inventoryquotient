@@ -1,6 +1,15 @@
 import { useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { IMAGES } from "../../../constants";
+import ProfileBrief from "../../../components/profileBrief";
 
 const { width, height } = Dimensions.get("screen");
 const Profile = () => {
@@ -8,18 +17,17 @@ const Profile = () => {
 
   return (
     <View
-      className="p-4 gap-4 py-12 "
+      className=" gap-6 py-12 flex flex-col"
       style={{ width: width, height: height }}
     >
-  
-      <View>
-        <Text className="text-gray-500 text-center font-bold border-b py-2">Profile</Text>
+      <View className="shadow-black shadow-sm bg-white elevation-md h-[98%] rounded-b-[4rem]">
+        <ProfileBrief />
+        <View>
+          <View>
+            <Text>Favourites</Text>
+          </View>
+        </View>
       </View>
-
-      <View>
-        
-      </View>
-      
     </View>
   );
 };
