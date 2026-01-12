@@ -26,7 +26,7 @@ const Profile = () => {
     >
       <View className="shadow-black shadow-sm bg-white elevation-md h-[98%] rounded-b-[4rem] gap-2">
         <ProfileBrief />
-        <View className="px-4">
+        <View className="px-4 gap-0.5">
           <TouchableOpacity className="flex flex-row items-center justify-between py-4">
             <View className="flex flex-row  gap-3 items-center">
               <FontAwesome name="heart-o" size={iconSize} color={iconColour} />
@@ -39,6 +39,14 @@ const Profile = () => {
             <View className="flex flex-row  gap-3 items-center">
               <MaterialIcons name="sell" size={24} color="black" />
               <Text className="text-xl text-gray-700">Restock List</Text>
+            </View>
+            <AntDesign name="right" size={iconSize} color={iconColour} />
+          </TouchableOpacity>
+          <View className="border-b border-b-[#9ca3af20]"></View>
+          <TouchableOpacity className="flex flex-row items-center justify-between py-4">
+            <View className="flex flex-row  gap-3 items-center">
+              <MaterialIcons name="logout" size={24} color="red" />
+              <Text className="text-xl text-gray-700">Logout</Text>
             </View>
             <AntDesign name="right" size={iconSize} color={iconColour} />
           </TouchableOpacity>
