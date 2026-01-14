@@ -1,9 +1,11 @@
 import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useAuthetication } from "../store/store";
+import { useRouter } from "expo-router";
 
 const ProfileMenu = () => {
   // store
+  const router = useRouter();
   const { logout } = useAuthetication();
 
   //local constants
@@ -21,7 +23,10 @@ const ProfileMenu = () => {
       </TouchableOpacity>
 
       {/* Restock List */}
-      <TouchableOpacity className="flex flex-row items-center justify-between py-4">
+      <TouchableOpacity
+        onPress={() => router.push("/restock")}
+        className="flex flex-row items-center justify-between py-4"
+      >
         <View className="flex flex-row  gap-3 items-center">
           <MaterialIcons name="sell" size={24} color="black" />
           <Text className="text-xl text-gray-700">Restock List</Text>
