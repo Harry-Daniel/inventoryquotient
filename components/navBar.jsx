@@ -5,7 +5,7 @@ import { useAuthetication } from "../store/store";
 const { width, height } = Dimensions.get("screen");
 const NavBar = () => {
   // Global Staes from Zustand
- 
+
   // custom colours
   const navbarSecondaryColor = "#ccc9c9";
   const navbarSecondaryTextColorNativewind = "text-[#ccc9c9]";
@@ -19,7 +19,7 @@ const NavBar = () => {
 
   // handling onPress Routing
   const handlePress = (path) => {
-    router.push({ pathname: path, params: { params: params } });
+    router.replace({ pathname: path, params: { params: params } });
   };
 
   // Naming the pathnames
@@ -54,7 +54,7 @@ const NavBar = () => {
             style={{ transform: [{ scale: 2 }], top: -8 }}
           ></View>
           <TouchableOpacity
-            onPress={() => handlePress("/")}
+            onPress={() => handlePress(homePathname)}
             className="justify-center items-center gap-1 "
           >
             <AntDesign
@@ -71,7 +71,7 @@ const NavBar = () => {
             style={{ transform: [{ scale: 2 }], top: -8 }}
           ></View>
           <TouchableOpacity
-            onPress={() => handlePress("/profile")}
+            onPress={() => handlePress(profilePathname)}
             className="justify-center items-center gap-1"
           >
             <AntDesign
