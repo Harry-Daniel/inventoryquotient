@@ -22,7 +22,7 @@ const ProfileBrief = () => {
             <Text className="text-sm">BigMama</Text>
           </View>
           <TouchableOpacity
-            onPress={() => router.push("/profile/editProfile")}
+            onPress={() => router.push("/editProfile")}
             className="px-4 py-2 rounded-2xl bg-blue-500"
           >
             <Text className="text-center text-white">Edit Profile</Text>
