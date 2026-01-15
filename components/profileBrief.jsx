@@ -17,7 +17,7 @@ const ProfileBrief = () => {
             <Text className="text-xl font-semibold text-wrap">
               Karen Mmabilla Adazabra
             </Text>
-            <Text className="text-sm">kmadazabra@gmail.com</Text>
+            <Text className="text-sm">BigMama</Text>
           </View>
           <TouchableOpacity className="px-4 py-2 rounded-2xl bg-blue-500">
             <Text className="text-center text-white">Edit Profile</Text>
