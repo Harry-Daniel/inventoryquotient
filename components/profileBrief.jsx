@@ -1,10 +1,12 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+
 import { IMAGES } from "../constants";
+import { useRouter } from "expo-router";
 
 const ProfileBrief = () => {
+  const router = useRouter();
   return (
-    <View >
+    <View>
       <View>
         <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
           Profile
@@ -19,7 +21,10 @@ const ProfileBrief = () => {
             </Text>
             <Text className="text-sm">BigMama</Text>
           </View>
-          <TouchableOpacity className="px-4 py-2 rounded-2xl bg-blue-500">
+          <TouchableOpacity
+            onPress={() => router.push("/profile/editProfile")}
+            className="px-4 py-2 rounded-2xl bg-blue-500"
+          >
             <Text className="text-center text-white">Edit Profile</Text>
           </TouchableOpacity>
         </View>
