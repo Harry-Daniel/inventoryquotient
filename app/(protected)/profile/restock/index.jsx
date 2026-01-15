@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import InventoryCard from "../../../components/inventoryCard";
-import { useData } from "../../../store/store";
+import InventoryCard from "../../../../components/inventoryCard";
+import { useData } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 

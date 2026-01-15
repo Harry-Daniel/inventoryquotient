@@ -24,7 +24,7 @@ const ProfileMenu = () => {
 
       {/* Restock List */}
       <TouchableOpacity
-        onPress={() => router.push("/restock")}
+        onPress={() => router.push("/profile/restock")}
         className="flex flex-row items-center justify-between py-4"
       >
         <View className="flex flex-row  gap-3 items-center">
