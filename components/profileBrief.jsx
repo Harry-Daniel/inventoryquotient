@@ -2,6 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import { IMAGES } from "../constants";
 import { useRouter } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
 const ProfileBrief = () => {
   const router = useRouter();
@@ -13,7 +14,12 @@ const ProfileBrief = () => {
         </Text>
       </View>
       <View className="flex flex-row items-center gap-7 py-2 justify-center px-4">
-        <Image source={IMAGES.authBg} className="w-40 h-40 rounded-full" />
+        <View className="relative">
+          <Image source={IMAGES.authBg} className="w-40 h-40 rounded-full" />
+          <TouchableOpacity className="absolute bottom-0 right-4 bg-white p-2 rounded-full shadow-md elevation-md shadow-black">
+            <AntDesign name="camera" size={16} color="black" />
+          </TouchableOpacity>
+        </View>
         <View className="w-[60%] gap-2 ">
           <View>
             <Text className="text-xl font-semibold text-wrap">
