@@ -8,7 +8,9 @@ export default function ProtectedLayout() {
   const hideNavbar =
     pathname.includes("editProfile") ||
     pathname.includes("Detail") ||
-    pathname.includes("restock");
+    pathname.includes("restock") ||
+    pathname.includes("addItem");
+
   const { authenticated } = useAuthetication();
   if (!authenticated) {
     return <Redirect href="/onboarding" />;
