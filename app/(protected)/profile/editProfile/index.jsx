@@ -38,7 +38,10 @@ const EditProfile = () => {
       </View>
       <View className="px-[4%] gap-8">
         <View>
-          <Text className=" font-semibold text-xl">Username</Text>
+          <View className="flex flex-row items-center">
+            <Text className=" font-semibold text-xl">Username </Text>
+            <Text className="text-gray-500">(editable)</Text>
+          </View>
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
             value={username}
