@@ -3,6 +3,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -26,9 +27,37 @@ const EditProfile = () => {
           <AntDesign name="camera" size={16} color="black" />
         </TouchableOpacity>
       </View>
-      {/* <View>
-        <Text>Hello</Text>
-      </View> */}
+      <View className="px-[4%] gap-8">
+        <View>
+          <Text className=" font-semibold text-xl">Username</Text>
+          <TextInput
+            className="border px-2 rounded-lg border-gray-400 text-gray-500"
+            readOnly
+            value="Don Dada"
+          />
+        </View>
+        <View>
+          <Text className=" font-semibold text-xl">Fullname</Text>
+          <TextInput
+            className="border px-2 rounded-lg border-gray-400 text-gray-500"
+            readOnly
+            value="Mawuko Senyo Hayibor"
+          />
+        </View>
+        <View>
+          <Text className=" font-semibold text-xl">Email address</Text>
+          <TextInput
+            className="border px-2 rounded-lg border-gray-400 text-gray-500"
+            readOnly
+            value="user@gmail.com"
+          />
+        </View>
+      </View>
+      <View className="px-[4%]">
+        <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
+          <Text className="text-white text-center">Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
