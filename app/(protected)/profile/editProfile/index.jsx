@@ -9,9 +9,18 @@ import {
 } from "react-native";
 import { IMAGES } from "../../../../constants";
 import { AntDesign } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
+  const initialUsername = "Don Dad";
+  const [username, setUserName] = useState(null);
+
+  useEffect(() => {
+    setUserName(initialUsername);
+  }, [initialUsername]);
+
+  const disabled = username === initialUsername;
   return (
     <View
       className=" gap-8 py-12 flex flex-col"
@@ -32,8 +41,8 @@ const EditProfile = () => {
           <Text className=" font-semibold text-xl">Username</Text>
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
-            readOnly
-            value="Don Dada"
+            value={username}
+            onChangeText={(text) => setUserName(text)}
           />
         </View>
         <View>
@@ -54,7 +63,10 @@ const EditProfile = () => {
         </View>
       </View>
       <View className="px-[4%]">
-        <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
+        <TouchableOpacity
+          disabled={disabled}
+          className="bg-blue-950 flex text-center py-3 my-[8%] "
+        >
           <Text className="text-white text-center">Save</Text>
         </TouchableOpacity>
       </View>
