@@ -4,11 +4,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { IMAGES } from "../constants";
+import { useRouter } from "expo-router";
 
 const HeroImage = () => {
+  const router = useRouter();
   return (
     <ImageBackground
       source={IMAGES.hero}
@@ -26,7 +28,10 @@ const HeroImage = () => {
           Do you keep forgetting what you own just to end up buying more? Trust
           us to have your back!
         </Text>
-        <TouchableOpacity className="bg-blue-200 px-2 py-1 rounded-2xl my-2 absolute bottom-8 w-32 justify-center items-center h-10 ">
+        <TouchableOpacity
+          onPress={() => router.push("/addItem")}
+          className="bg-blue-200 px-2 py-1 rounded-2xl my-2 absolute bottom-8 w-32 justify-center items-center h-10 "
+        >
           <Text className="font-semibold text-gray-800 ">Add item</Text>
         </TouchableOpacity>
       </View>
