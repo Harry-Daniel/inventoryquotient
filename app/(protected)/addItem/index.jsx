@@ -7,7 +7,9 @@ const AddItem = () => {
       className=" gap-6 py-12 flex flex-col"
       style={{ width: width, height: height }}
     >
-      <Text>AddItem</Text>
+     <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
+        Add Item
+      </Text>
     </View>
   );
 };
