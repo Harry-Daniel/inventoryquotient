@@ -26,15 +26,14 @@ const ImageInput = () => {
   };
 
   return (
-   
     <Pressable
       onPress={pickImage}
-      className="flex border border-dashed border-gray-400 h-48 rounded-lg justify-center items-center relative "
+      className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
     >
       {image && (
         <Image
           source={{ uri: image }}
-          className="w-full h-48 rounded-lg"
+          className="w-full h-72 rounded-lg"
           resizeMode="cover"
         />
       )}
