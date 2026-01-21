@@ -25,7 +25,6 @@ const AddItem = () => {
       <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2 ">
         Add Item
       </Text>
-      <ImageInput />
       {/* Title of item */}
       <View className="px-[4%]">
         <View className="relative">
@@ -63,7 +62,7 @@ const AddItem = () => {
         </View>
       </View>
 
-      {/* Title of item */}
+      {/* Storage Location of item */}
       <View className="px-[4%]">
         <View className="relative">
           <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
@@ -82,12 +81,19 @@ const AddItem = () => {
           />
         </View>
       </View>
+      <ImageInput />
 
       <View className="px-[4%]">
         <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
           <Text className="text-white text-center">Save</Text>
         </TouchableOpacity>
       </View>
+
+      <Text className="text-red-600 text-center">
+        {" "}
+        This page is for adding <Text className="font-bold"> New </Text>items
+        only
+      </Text>
     </View>
   );
 };
