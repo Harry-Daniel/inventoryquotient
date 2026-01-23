@@ -10,6 +10,7 @@ import {
 import { IMAGES } from "../../../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import DisplayPicture from "../../../../components/editProfile/displayPicture";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
@@ -30,12 +31,16 @@ const EditProfile = () => {
         Edit Profile
       </Text>
 
-      <View className="relative justify-center items-center mx-auto">
+      {/* <View className="relative justify-center items-center mx-auto">
         <Image source={IMAGES.authBg} className="w-40 h-40 rounded-full" />
         <TouchableOpacity className="absolute bottom-0 right-4 bg-white p-2 rounded-full shadow-md elevation-md shadow-black">
           <AntDesign name="camera" size={16} color="black" />
         </TouchableOpacity>
+      </View> */}
+      <View className="relative justify-center items-center mx-auto">
+        <DisplayPicture />
       </View>
+
       <View className="px-[4%] gap-8">
         <View>
           <View className="flex flex-row items-center">

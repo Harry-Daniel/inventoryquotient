@@ -11,7 +11,7 @@ import { useState } from "react";
 import { IMAGES } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 
-const displayPicture = () => {
+const DisplayPicture = () => {
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
@@ -50,6 +50,6 @@ const displayPicture = () => {
   );
 };
 
-export default displayPicture;
+export default DisplayPicture;
 
 const styles = StyleSheet.create({});
