@@ -1,4 +1,6 @@
+import Toast from "react-native-toast-message";
 import { Slot, Redirect, usePathname } from "expo-router";
+
 import { useAuthetication } from "../../store/store";
 import { StyleSheet, Text, View } from "react-native";
 import NavBar from "../../components/navBar";
@@ -21,6 +23,7 @@ export default function ProtectedLayout() {
       <View className="flex-1">
         <Slot />
         {!hideNavbar && <NavBar />}
+        <Toast />
       </View>
     </View>
   );

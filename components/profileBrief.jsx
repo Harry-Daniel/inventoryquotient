@@ -1,14 +1,24 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-
+import Toast from "react-native-toast-message";
 import { IMAGES } from "../constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import DisplayPicture from "./editProfile/displayPicture";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ProfileBrief = () => {
   const router = useRouter();
   const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    if (!image) return;
+
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Profile picture changed successfully",
+    });
+  }, [image]);
 
   return (
     <View>
