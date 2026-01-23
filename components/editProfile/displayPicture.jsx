@@ -37,7 +37,7 @@ const displayPicture = () => {
   return (
     <View className="relative">
       <Image
-        source={image ? { uri: image } : IMAGES.authBg}
+        source={image ? { uri: image } : IMAGES.user}
         className="w-40 h-40 rounded-full"
       />
       <TouchableOpacity
