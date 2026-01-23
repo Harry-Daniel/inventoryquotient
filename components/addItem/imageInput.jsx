@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable, Image, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 
@@ -26,7 +26,7 @@ const ImageInput = () => {
   };
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={pickImage}
       className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
     >
@@ -40,7 +40,7 @@ const ImageInput = () => {
       <Text className="text-white bg-[#00000050] py-2 px-3 rounded-xl absolute left-[35%] top-[35%] z-10">
         {image ? "Change Image" : "Pick an Image"}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
