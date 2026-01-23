@@ -11,8 +11,7 @@ import { useState } from "react";
 import { IMAGES } from "../../constants";
 import { AntDesign } from "@expo/vector-icons";
 
-const DisplayPicture = () => {
-  const [image, setImage] = useState(null);
+const DisplayPicture = ({image,setImage}) => {
 
   const pickImage = async () => {
     // Ask permission

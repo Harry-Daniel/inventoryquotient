@@ -4,9 +4,12 @@ import { IMAGES } from "../constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import DisplayPicture from "./editProfile/displayPicture";
+import { useState } from "react";
 
 const ProfileBrief = () => {
   const router = useRouter();
+  const [image, setImage] = useState(null);
+
   return (
     <View>
       <View>
@@ -21,7 +24,7 @@ const ProfileBrief = () => {
             <AntDesign name="camera" size={16} color="black" />
           </TouchableOpacity>
         </View> */}
-        <DisplayPicture />
+        <DisplayPicture image={image} setImage={setImage} />
         <View className="w-[60%] gap-2 ">
           <View>
             <Text className="text-xl font-semibold text-wrap">
