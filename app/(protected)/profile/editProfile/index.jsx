@@ -1,3 +1,5 @@
+import Toast from "react-native-toast-message";
+
 import {
   Dimensions,
   Image,
@@ -11,18 +13,30 @@ import { IMAGES } from "../../../../constants";
 import { AntDesign } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import DisplayPicture from "../../../../components/editProfile/displayPicture";
+import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
+  const initialImage = null;
   const initialUsername = "Don Dad";
   const [username, setUserName] = useState(null);
   const [image, setImage] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     setUserName(initialUsername);
   }, [initialUsername]);
 
-  const disabled = username === initialUsername;
+  const disabled = username === initialUsername && image === initialImage;
+
+  const handleSave = () => {
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Profile details changed successfully",
+    });
+    router.back();
+  };
   return (
     <View
       className=" gap-8 py-12 flex flex-col"
@@ -67,6 +81,7 @@ const EditProfile = () => {
       </View>
       <View className="px-[4%]">
         <TouchableOpacity
+          onPress={handleSave}
           disabled={disabled}
           className="bg-blue-950 flex text-center py-3 my-[8%] "
         >
