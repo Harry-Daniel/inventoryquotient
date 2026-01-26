@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -10,6 +11,7 @@ import ImageInput from "../../../../components/addItem/imageInput";
 import { useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useData } from "../../../../store/store";
+import * as ImagePicker from "expo-image-picker";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
@@ -25,7 +27,30 @@ const AddItem = () => {
     quantity: item?.inventory.toString() || null,
     storagePlace: item?.description || null,
   });
-// quantity displays when it is a string
+  // quantity displays when it is a string
+
+  const pickImage = async () => {
+    // Ask permission
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      alert("Permission required to access images");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setItemDetails((prev) => ({
+        ...prev,
+        image: result.assets[0].uri,
+      }));
+    }
+  };
   return (
     <View
       className=" gap-12 py-12 flex flex-col"
@@ -90,7 +115,26 @@ const AddItem = () => {
           />
         </View>
       </View>
-      <ImageInput />
+
+
+      {/* Image Picker */}
+      <TouchableOpacity
+        onPress={pickImage}
+        className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
+      >
+        {itemDetails.image && (
+          <Image
+            source={{ uri: itemDetails.image }}
+            className="w-full h-72 rounded-lg"
+            resizeMode="cover"
+          />
+        )}
+        <Text className="text-white bg-[#00000050] py-2 px-3 rounded-xl absolute left-[35%] top-[35%] z-10">
+          {itemDetails.image ? "Change Image" : "Pick an Image"}
+        </Text>
+      </TouchableOpacity>
+
+      
 
       <View className="px-[4%]">
         <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
