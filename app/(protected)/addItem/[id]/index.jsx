@@ -13,16 +13,19 @@ import { useData } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
-  const [itemDetails, setItemDetails] = useState({
-    image: null,
-    title: "",
-    quantity: null,
-    storagePlace: "",
-  });
   // This allows us know if the user navigated using the add item button or the manage inventory button. id==='0' means they used the add item button
+
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
+
+  const [itemDetails, setItemDetails] = useState({
+    image: item?.image || null,
+    title: item?.name || null,
+    quantity: item?.inventory.toString() || null,
+    storagePlace: item?.description || null,
+  });
+// quantity displays when it is a string
   return (
     <View
       className=" gap-12 py-12 flex flex-col"
