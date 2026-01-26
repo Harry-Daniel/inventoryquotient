@@ -61,7 +61,7 @@ const ItemDetail = () => {
           <View className="gap-2 flex">
             <TouchableOpacity
               className="bg-blue-300  rounded-full py-4 "
-              onPress={() => router.push("/addItem")}
+              onPress={() => router.push(`/addItem/${item.id}`)}
             >
               <Text className="text-center font-semibold text-blue-950">
                 Manage Inventory

@@ -29,7 +29,7 @@ const HeroImage = () => {
           us to have your back!
         </Text>
         <TouchableOpacity
-          onPress={() => router.push("/addItem")}
+          onPress={() => router.push("/addItem/0")}
           className="bg-blue-200 px-2 py-1 rounded-2xl my-2 absolute bottom-8 w-32 justify-center items-center h-10 "
         >
           <Text className="font-semibold text-gray-800 ">Add item</Text>

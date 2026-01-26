@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ImageInput from "../../../components/addItem/imageInput";
+import ImageInput from "../../../../components/addItem/imageInput";
 import { useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { useData } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
@@ -17,6 +19,10 @@ const AddItem = () => {
     quantity: null,
     storagePlace: "",
   });
+  // This allows us know if the user navigated using the add item button or the manage inventory button. id==='0' means they used the add item button
+  const { id } = useLocalSearchParams();
+  const { indexedList } = useData();
+  const item = indexedList[id];
   return (
     <View
       className=" gap-12 py-12 flex flex-col"
@@ -89,11 +95,13 @@ const AddItem = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className="text-red-600 text-center">
-        {" "}
-        This page is for adding <Text className="font-bold"> New </Text>items
-        only
-      </Text>
+      {!item && (
+        <Text className="text-red-600 text-center">
+          {" "}
+          The item should not already exist in inventory. Add only
+          <Text className="font-bold"> New </Text>items only
+        </Text>
+      )}
     </View>
   );
 };
