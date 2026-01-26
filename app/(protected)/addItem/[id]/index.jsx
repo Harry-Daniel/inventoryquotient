@@ -1,3 +1,6 @@
+import * as ImagePicker from "expo-image-picker";
+import { useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -7,11 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ImageInput from "../../../../components/addItem/imageInput";
-import { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
 import { useData } from "../../../../store/store";
-import * as ImagePicker from "expo-image-picker";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
