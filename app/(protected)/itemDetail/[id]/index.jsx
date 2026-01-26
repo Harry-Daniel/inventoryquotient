@@ -9,12 +9,13 @@ import {
 } from "react-native";
 import { IMAGES } from "../../../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useData } from "../../../../store/store";
 import { StatusBar } from "expo-status-bar";
 
 const { width, height } = Dimensions.get("screen");
 const ItemDetail = () => {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
@@ -47,7 +48,7 @@ const ItemDetail = () => {
         </View>
 
         <Text className="leading-6">{item.description}</Text>
-{/* Last Updated */}
+        {/* Last Updated */}
         <View className="absolute bottom-32 left-[7%] w-full px-4 gap-8">
           <View className="flex flex-row gap-6 items-center">
             <Image source={IMAGES.hero} className="w-20 h-20 rounded-full" />
@@ -57,11 +58,21 @@ const ItemDetail = () => {
               <Text className="text-xs">21/02/2025</Text>
             </View>
           </View>
-          <TouchableOpacity className="bg-blue-300  rounded-full py-4 ">
-            <Text className="text-center font-semibold text-blue-950">
-              Add to Restock List
-            </Text>
-          </TouchableOpacity>
+          <View className="gap-2 flex">
+            <TouchableOpacity
+              className="bg-blue-300  rounded-full py-4 "
+              onPress={() => router.push("/addItem")}
+            >
+              <Text className="text-center font-semibold text-blue-950">
+                Manage Inventory
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="bg-blue-950  rounded-full py-4 ">
+              <Text className="text-center font-semibold text-white">
+                Add to Restock List
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
