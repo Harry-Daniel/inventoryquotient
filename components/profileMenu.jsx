@@ -14,13 +14,13 @@ const ProfileMenu = () => {
   return (
     <View className="px-4 gap-0.5">
       {/* Favourites */}
-      <TouchableOpacity className="flex flex-row items-center justify-between py-4">
+      {/* <TouchableOpacity className="flex flex-row items-center justify-between py-4">
         <View className="flex flex-row  gap-3 items-center">
           <FontAwesome name="heart-o" size={iconSize} color={iconColour} />
           <Text className="text-xl text-gray-700">Favourites</Text>
         </View>
         <AntDesign name="right" size={iconSize} color={iconColour} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Restock List */}
       <TouchableOpacity
