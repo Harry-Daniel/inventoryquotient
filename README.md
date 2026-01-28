@@ -18,6 +18,7 @@ Create a new Expo app using this template:
 npx create-expo-app my-app --template https://github.com/Harry-Daniel/nextjs-nativewind
 
 
-
+run app using
+npx expo start
 ---
 
