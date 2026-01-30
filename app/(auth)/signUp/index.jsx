@@ -1,3 +1,4 @@
+import { z } from "zod";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -9,14 +10,21 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
-import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const SignUp = () => {
-  const { login } = useAuthetication;
+  const signUpSchema = z.object({
+    fullname: z
+      .string()
+      .min(1, "Fullname field is required")
+      .max(255, "You have exceeded the character limit for fullname"),
+    email: z.email("A valid email is required"),
+    password: z.string().min(1, "Password Field is required"),
+  });
+
   const router = useRouter();
 
   const [userDetails, setUserDetails] = useState({
@@ -31,32 +39,15 @@ const SignUp = () => {
   // simulating on submit
 
   const handleOnSubmit = () => {
-    const validationErrors = [];
-
-    if (
-      userDetails.fullname.length < 1 ||
-      userDetails.password.length < 1 ||
-      userDetails.email.length < 1
-    ) {
-      validationErrors.push("Leave no field empty");
+    const result = signUpSchema.safeParse(userDetails);
+    if (!result.success) {
+      const errorMessages = result.error.issues.map((issue) => issue.message);
+      setErrors(errorMessages);
+      return;
     }
 
-    if (
-      userDetails.email.length > 0 &&
-      (!userDetails.email.includes("@") || !userDetails.email.includes("."))
-    ) {
-      validationErrors.push("Provide a proper email");
-    }
-
-    if (!isChecked) {
-      validationErrors.push("You need to agree to processing of your data");
-    }
-
-    setErrors(validationErrors);
-
-    if (validationErrors.length === 0) {
-      router.replace({ pathname: "/signIn" });
-    }
+    setErrors([]);
+    router.replace({ pathname: "/signIn" });
   };
 
   return (
@@ -164,7 +155,6 @@ const SignUp = () => {
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
           <TouchableOpacity
-          
             onPress={() => router.replace({ pathname: "/signIn" })}
           >
             <Text className="text-blue-900 ">Sign In</Text>
