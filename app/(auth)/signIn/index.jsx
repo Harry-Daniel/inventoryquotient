@@ -1,3 +1,4 @@
+import { z } from "zod";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -9,13 +10,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { IMAGES } from "../../../constants";
 import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const SignIn = () => {
+  const signInSchema = z.object({
+    email: z.email("Provide a proper email"),
+
+    password: z.string().min(1, "Password is required"),
+  });
   const { login } = useAuthetication();
   const router = useRouter();
 
@@ -30,25 +36,17 @@ const SignIn = () => {
   // simulating on submit
 
   const handleOnSubmit = () => {
-    const validationErrors = [];
+    const result = signInSchema.safeParse(userDetails);
 
-    if (userDetails.password.length < 1 || userDetails.email.length < 1) {
-      validationErrors.push("Leave no field empty");
+    if (!result.success) {
+      const errorMessages = result.error.issues.map((issue) => issue.message);
+      setErrors(errorMessages);
+      return;
     }
 
-    if (
-      userDetails.email.length > 0 &&
-      (!userDetails.email.includes("@") || !userDetails.email.includes("."))
-    ) {
-      validationErrors.push("Provide a proper email");
-    }
-
-    setErrors(validationErrors);
-
-    if (validationErrors.length === 0) {
-      login();
-      router.replace({ pathname: "/" });
-    }
+    setErrors([]);
+    login();
+    router.replace({ pathname: "/" });
   };
 
   return (
