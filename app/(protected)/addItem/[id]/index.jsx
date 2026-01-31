@@ -1,6 +1,7 @@
 import { z } from "zod";
+import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Dimensions,
@@ -15,6 +16,7 @@ import { useData } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
+  const router = useRouter();
   // zod schemas
   const imageAssetSchema = z
     .union([
@@ -101,6 +103,15 @@ const AddItem = () => {
 
     setErrors([]);
     console.log(result.data);
+
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: item
+        ? `${result.data.title} details updated successfully`
+        : `${result.data.title} added successfully`,
+    });
+    router.back();
   };
   return (
     <View
