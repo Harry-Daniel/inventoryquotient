@@ -1,3 +1,4 @@
+import { z } from "zod";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -14,8 +15,27 @@ import { useData } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
-  // This allows us know if the user navigated using the add item button or the manage inventory button. id==='0' means they used the add item button
+  // zod schemas
+  const imageAssetSchema = z.object({
+    uri: z.string().min(1, "Image URI is required"),
+    width: z.number().positive(),
+    height: z.number().positive(),
+    type: z.literal("image").optional(),
+    fileName: z.string().optional(),
+    fileSize: z.number().positive().optional(),
+  });
 
+  const itemSchema = z.object({
+    image: imageAssetSchema,
+    title: z.string().trim().min(1, "Title field is required"),
+    quantity: z.number().int().positive("Quantity must be greater than 0"),
+    storagePlace: z
+      .string()
+      .trim()
+      .min(1, "Storage Location Field is required"),
+  });
+
+  // This allows us know if the user navigated using the add item button or the manage inventory button. id==='0' means they used the add item button
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
@@ -50,6 +70,11 @@ const AddItem = () => {
       }));
     }
   };
+
+
+  const handleSubmit=()=>{
+    
+  }
   return (
     <View
       className=" gap-12 py-12 flex flex-col"
@@ -115,7 +140,6 @@ const AddItem = () => {
         </View>
       </View>
 
-
       {/* Image Picker */}
       <TouchableOpacity
         onPress={pickImage}
@@ -132,8 +156,6 @@ const AddItem = () => {
           {itemDetails.image ? "Change Image" : "Pick an Image"}
         </Text>
       </TouchableOpacity>
-
-      
 
       <View className="px-[4%]">
         <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
