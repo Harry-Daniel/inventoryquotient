@@ -17,15 +17,26 @@ const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
   // zod schemas
   const imageAssetSchema = z
-    .object({
-      uri: z.string().min(1, "Image URI is required"),
-      width: z.number().positive(),
-      height: z.number().positive(),
-      type: z.literal("image").optional(),
-      fileName: z.string().optional(),
-      fileSize: z.number().positive().optional(),
-    })
-    .transform((asset) => asset.uri);
+    .union([
+      // ImagePicker asset
+      // Accepts two forms of inputs and transforms them into one, either the imag-picker object or the uri from the existing database element
+      z.object({
+        uri: z.string().min(1),
+        width: z.number().positive(),
+        height: z.number().positive(),
+        type: z.literal("image").optional(),
+        fileName: z.string().optional(),
+        fileSize: z.number().optional(),
+      }),
+
+      // Existing DB image (edit mode)
+      z.url(),
+    ])
+    .transform((value) => {
+      // Normalize to string (what DB needs)
+      if (typeof value === "string") return value;
+      return value.uri;
+    });
 
   const itemSchema = z.object({
     image: imageAssetSchema,
@@ -161,9 +172,10 @@ const AddItem = () => {
         onPress={pickImage}
         className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
       >
+        {/* if item exists and we are in edit screen displays only uri as default. if in create screen, displays uri element of image object */}
         {itemDetails.image && (
           <Image
-            source={{ uri: itemDetails.image.uri }}
+            source={{ uri: item ? itemDetails.image : itemDetails.image.uri }}
             className="w-full h-72 rounded-lg"
             resizeMode="cover"
           />
