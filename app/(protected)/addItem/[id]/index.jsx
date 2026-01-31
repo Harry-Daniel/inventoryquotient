@@ -16,19 +16,27 @@ import { useData } from "../../../../store/store";
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
   // zod schemas
-  const imageAssetSchema = z.object({
-    uri: z.string().min(1, "Image URI is required"),
-    width: z.number().positive(),
-    height: z.number().positive(),
-    type: z.literal("image").optional(),
-    fileName: z.string().optional(),
-    fileSize: z.number().positive().optional(),
-  });
+  const imageAssetSchema = z
+    .object({
+      uri: z.string().min(1, "Image URI is required"),
+      width: z.number().positive(),
+      height: z.number().positive(),
+      type: z.literal("image").optional(),
+      fileName: z.string().optional(),
+      fileSize: z.number().positive().optional(),
+    })
+    .transform((asset) => asset.uri);
 
   const itemSchema = z.object({
     image: imageAssetSchema,
     title: z.string().trim().min(1, "Title field is required"),
-    quantity: z.number().int().positive("Quantity must be greater than 0"),
+    quantity: z.preprocess(
+      (val) => Number(val),
+      z
+        .number("Quantity should be a number")
+        .int()
+        .positive("Quantity must be greater than 0"),
+    ),
     storagePlace: z
       .string()
       .trim()
@@ -42,10 +50,11 @@ const AddItem = () => {
 
   const [itemDetails, setItemDetails] = useState({
     image: item?.image || null,
-    title: item?.name || null,
-    quantity: item?.inventory.toString() || null,
-    storagePlace: item?.description || null,
+    title: item?.name || "",
+    quantity: item?.inventory.toString() || "",
+    storagePlace: item?.description || "",
   });
+  const [errors, setErrors] = useState([]);
   // quantity displays when it is a string
 
   const pickImage = async () => {
@@ -66,15 +75,22 @@ const AddItem = () => {
     if (!result.canceled) {
       setItemDetails((prev) => ({
         ...prev,
-        image: result.assets[0].uri,
+        image: result.assets[0],
       }));
     }
   };
 
+  const handleSubmit = () => {
+    const result = itemSchema.safeParse(itemDetails);
 
-  const handleSubmit=()=>{
-    
-  }
+    if (!result.success) {
+      setErrors(result.error.issues.map((issue) => issue.message));
+      return;
+    }
+
+    setErrors([]);
+    console.log(result.data);
+  };
   return (
     <View
       className=" gap-12 py-12 flex flex-col"
@@ -147,7 +163,7 @@ const AddItem = () => {
       >
         {itemDetails.image && (
           <Image
-            source={{ uri: itemDetails.image }}
+            source={{ uri: itemDetails.image.uri }}
             className="w-full h-72 rounded-lg"
             resizeMode="cover"
           />
@@ -158,18 +174,33 @@ const AddItem = () => {
       </TouchableOpacity>
 
       <View className="px-[4%]">
-        <TouchableOpacity className="bg-blue-950 flex text-center py-3 my-[8%] ">
+        <TouchableOpacity
+          onPress={handleSubmit}
+          className="bg-blue-950 flex text-center py-3 my-[8%] "
+        >
           <Text className="text-white text-center">Save</Text>
         </TouchableOpacity>
       </View>
 
-      {!item && (
+      {!errors && !item && (
         <Text className="text-red-600 text-center">
           {" "}
           The item should not already exist in inventory. Add only
           <Text className="font-bold"> New </Text>items only
         </Text>
       )}
+
+      <View
+        className="flex gap-2 justify-center items-center
+      "
+      >
+        {errors.length > 0 &&
+          errors.map((error, index) => (
+            <Text className="text-red-600" key={index}>
+              {error}
+            </Text>
+          ))}
+      </View>
     </View>
   );
 };
