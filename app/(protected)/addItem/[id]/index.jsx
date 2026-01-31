@@ -194,7 +194,7 @@ const AddItem = () => {
         </TouchableOpacity>
       </View>
 
-      {!errors && !item && (
+      {errors.length === 0 && !item && (
         <Text className="text-red-600 text-center">
           {" "}
           The item should not already exist in inventory. Add only
