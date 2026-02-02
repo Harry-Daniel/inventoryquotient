@@ -1,4 +1,5 @@
 import { z } from "zod";
+import isEqual from "lodash.isequal";
 import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -61,6 +62,13 @@ const AddItem = () => {
   const { indexedList } = useData();
   const item = indexedList[id];
 
+  const [existingItemDetails, setexistingItemDetails] = useState({
+    image: item?.image || null,
+    title: item?.name || "",
+    quantity: item?.inventory.toString() || "",
+    storagePlace: item?.description || "",
+  });
+
   const [itemDetails, setItemDetails] = useState({
     image: item?.image || null,
     title: item?.name || "",
@@ -94,7 +102,9 @@ const AddItem = () => {
   };
 
   const handleSubmit = () => {
+    const existingItemResult = itemSchema.safeParse(existingItemDetails);
     const result = itemSchema.safeParse(itemDetails);
+    const is_same = isEqual(existingItemResult, result);
 
     if (!result.success) {
       setErrors(result.error.issues.map((issue) => issue.message));
@@ -102,15 +112,19 @@ const AddItem = () => {
     }
 
     setErrors([]);
-    console.log(result.data);
-
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: item
-        ? `${result.data.title} details updated successfully`
-        : `${result.data.title} added successfully`,
-    });
+    is_same
+      ? Toast.show({
+          type: "info",
+          text1: "No changes detected",
+          text2: `No changes were made to ${result.data.title}`,
+        })
+      : Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: item
+            ? `${result.data.title} details updated successfully`
+            : `${result.data.title} added successfully`,
+        });
     router.back();
   };
   return (
