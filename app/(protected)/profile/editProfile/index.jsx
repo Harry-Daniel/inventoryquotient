@@ -82,7 +82,6 @@ const EditProfile = () => {
   const handleSave = () => {
     const existingProfileResult = ProfileSchema.safeParse(existingProfileInfo);
     const result = ProfileSchema.safeParse(profileInfo);
-    const is_same = isEqual(existingProfileResult, result);
 
     if (!result.success) {
       setErrors(result.error.issues.map((issue) => issue.message));
@@ -90,19 +89,29 @@ const EditProfile = () => {
     }
 
     setErrors([]);
-    is_same
-      ? Toast.show({
-          type: "info",
-          text1: "No changes detected",
-          text2: `No changes were made`,
-        })
-      : Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: "Changes have been saved",
-        });
+
+    const isSame =
+      existingProfileResult.success &&
+      isEqual(existingProfileResult.data, result.data);
+
+    if (isSame) {
+      Toast.show({
+        type: "info",
+        text1: "No changes detected",
+        text2: "No changes were made",
+      });
+      return;
+    }
+
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Changes have been saved",
+    });
+
     router.back();
   };
+
   return (
     <View
       className=" gap-8 py-12 flex flex-col"
