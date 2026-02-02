@@ -1,40 +1,106 @@
 import Toast from "react-native-toast-message";
+import { z } from "zod";
+import isEqual from "lodash.isequal";
 
+import * as ImagePicker from "expo-image-picker";
+
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
-  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
+import DisplayPicture from "../../../../components/editProfile/displayPicture";
 import { IMAGES } from "../../../../constants";
 import { AntDesign } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import DisplayPicture from "../../../../components/editProfile/displayPicture";
-import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
-  const initialImage = null;
-  const initialUsername = "Don Dad";
-  const [username, setUserName] = useState(null);
-  const [image, setImage] = useState(null);
+  const imageAssetSchema = z
+    .union([
+      z.object({
+        uri: z.string().min(1),
+        width: z.number().positive(),
+        height: z.number().positive(),
+        type: z.literal("image").optional(),
+        fileName: z.string().optional(),
+        fileSize: z.number().optional(),
+      }),
+      z.string(),
+    ])
+    .optional()
+    .transform((value) => {
+      if (!value) return undefined;
+      return typeof value === "string" ? value : value.uri;
+    });
+
+  const ProfileSchema = z.object({
+    image: imageAssetSchema,
+    username: z.string().min(1, "A username is required"),
+  });
+
+  // useStates for form data and errors
+  const [existingProfileInfo, setExistingProfileInfo] = useState({
+    username: "DonDada",
+    image: undefined,
+  });
+  const [profileInfo, setProfileInfo] = useState({
+    username: "DonDada",
+    image: undefined,
+  });
+
+  const [errors, setErrors] = useState([]);
+
   const router = useRouter();
 
-  useEffect(() => {
-    setUserName(initialUsername);
-  }, [initialUsername]);
+  // Picking Image
+  const pickImage = async () => {
+    // Ask permission
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  const disabled = username === initialUsername && image === initialImage;
+    if (!permission.granted) {
+      alert("Permission required to access images");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfileInfo((prev) => ({ ...prev, image: result.assets[0].uri }));
+    }
+  };
 
   const handleSave = () => {
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Profile details changed successfully",
-    });
+    const existingProfileResult = ProfileSchema.safeParse(existingProfileInfo);
+    const result = ProfileSchema.safeParse(profileInfo);
+    const is_same = isEqual(existingProfileResult, result);
+
+    if (!result.success) {
+      setErrors(result.error.issues.map((issue) => issue.message));
+      return;
+    }
+
+    setErrors([]);
+    is_same
+      ? Toast.show({
+          type: "info",
+          text1: "No changes detected",
+          text2: `No changes were made`,
+        })
+      : Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Changes have been saved",
+        });
     router.back();
   };
   return (
@@ -47,7 +113,20 @@ const EditProfile = () => {
       </Text>
 
       <View className="relative justify-center items-center mx-auto">
-        <DisplayPicture image={image} setImage={setImage} />
+        <View className="relative">
+          <Image
+            source={
+              profileInfo.image ? { uri: profileInfo.image } : IMAGES.user
+            }
+            className="w-40 h-40 rounded-full"
+          />
+          <TouchableOpacity
+            onPress={pickImage}
+            className="absolute bottom-0 right-4 bg-white p-2 rounded-full shadow-md elevation-md shadow-black"
+          >
+            <AntDesign name="camera" size={16} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View className="px-[4%] gap-8">
@@ -58,8 +137,10 @@ const EditProfile = () => {
           </View>
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
-            value={username}
-            onChangeText={(text) => setUserName(text)}
+            value={profileInfo.username}
+            onChangeText={(text) =>
+              setProfileInfo((prev) => ({ ...prev, username: text }))
+            }
           />
         </View>
         <View>
@@ -82,11 +163,21 @@ const EditProfile = () => {
       <View className="px-[4%]">
         <TouchableOpacity
           onPress={handleSave}
-          disabled={disabled}
           className="bg-blue-950 flex text-center py-3 my-[8%] "
         >
           <Text className="text-white text-center">Save</Text>
         </TouchableOpacity>
+      </View>
+      <View
+        className="flex gap-2 justify-center items-center
+      "
+      >
+        {errors.length > 0 &&
+          errors.map((error, index) => (
+            <Text className="text-red-600" key={index}>
+              {error}
+            </Text>
+          ))}
       </View>
     </View>
   );
