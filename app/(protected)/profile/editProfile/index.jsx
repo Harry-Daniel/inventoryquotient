@@ -1,23 +1,22 @@
+import isEqual from "lodash.isequal";
 import Toast from "react-native-toast-message";
 import { z } from "zod";
-import isEqual from "lodash.isequal";
 
 import * as ImagePicker from "expo-image-picker";
 
+import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dimensions,
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
 } from "react-native";
-import DisplayPicture from "../../../../components/editProfile/displayPicture";
 import { IMAGES } from "../../../../constants";
-import { AntDesign } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
@@ -169,24 +168,26 @@ const EditProfile = () => {
           />
         </View>
       </View>
-      <View className="px-[4%]">
-        <TouchableOpacity
-          onPress={handleSave}
-          className="bg-blue-950 flex text-center py-3 my-[8%] "
+      <View>
+        <View className="px-[4%]">
+          <TouchableOpacity
+            onPress={handleSave}
+            className="bg-blue-950 flex text-center py-3 my-[8%] "
+          >
+            <Text className="text-white text-center">Save</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          className="flex gap-2 justify-center items-center
+        "
         >
-          <Text className="text-white text-center">Save</Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        className="flex gap-2 justify-center items-center
-      "
-      >
-        {errors.length > 0 &&
-          errors.map((error, index) => (
-            <Text className="text-red-600" key={index}>
-              {error}
-            </Text>
-          ))}
+          {errors.length > 0 &&
+            errors.map((error, index) => (
+              <Text className="text-red-600" key={index}>
+                {error}
+              </Text>
+            ))}
+        </View>
       </View>
     </View>
   );
