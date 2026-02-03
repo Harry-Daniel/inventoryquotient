@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { set, z } from "zod";
 import isEqual from "lodash.isequal";
 import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
@@ -42,7 +42,6 @@ const AddItem = () => {
     });
 
   const itemSchema = z.object({
-    image: imageAssetSchema,
     title: z.string().trim().min(1, "Title field is required"),
     quantity: z.preprocess(
       (val) => Number(val),
@@ -55,6 +54,7 @@ const AddItem = () => {
       .string()
       .trim()
       .min(1, "Storage Location Field is required"),
+    image: imageAssetSchema,
   });
 
   // This allows us know if the user navigated using the add item button or the manage inventory button. id==='0' means they used the add item button
@@ -108,6 +108,13 @@ const AddItem = () => {
 
     if (!result.success) {
       setErrors(result.error.issues.map((issue) => issue.message));
+      // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
+      itemDetails.image
+        ? null
+        : setErrors((prev) => [
+            ...prev.filter((error) => error !== "Invalid input"),
+            "Image is required",
+          ]);
       return;
     }
 
