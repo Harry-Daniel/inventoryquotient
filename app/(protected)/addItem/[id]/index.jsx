@@ -63,14 +63,14 @@ const AddItem = () => {
   const item = indexedList[id];
 
   const [existingItemDetails, setexistingItemDetails] = useState({
-    image: item?.image || null,
+    image: item?.image || undefined,
     title: item?.name || "",
     quantity: item?.inventory.toString() || "",
     storagePlace: item?.description || "",
   });
 
   const [itemDetails, setItemDetails] = useState({
-    image: item?.image || null,
+    image: item?.image || undefined,
     title: item?.name || "",
     quantity: item?.inventory.toString() || "",
     storagePlace: item?.description || "",
