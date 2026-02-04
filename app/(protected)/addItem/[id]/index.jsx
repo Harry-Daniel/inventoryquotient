@@ -93,10 +93,11 @@ const AddItem = () => {
       quality: 1,
     });
 
+    // Used conditional statements for whenin edit screen vs add screen
     if (!result.canceled) {
       setItemDetails((prev) => ({
         ...prev,
-        image: result.assets[0],
+        image: item ? result.assets[0].uri : result.assets[0],
       }));
     }
   };
