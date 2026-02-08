@@ -19,7 +19,7 @@ const Home = () => {
           />
         </View>
 
-        <Categories />
+        {/* <Categories /> */}
 
         <InventoryList />
       </View>
