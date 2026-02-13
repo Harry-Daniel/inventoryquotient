@@ -13,6 +13,7 @@ const Home = () => {
         <View className="flex items-center justify-center">
           <TextInput
             placeholder="search"
+            placeholderTextColor="#4b5563"
             autoCapitalize="none"
             autoCorrect={true}
             className="border rounded-lg border-gray-500 focus:border-blue-950  w-[80%] py-0.5 pl-4 text-black"

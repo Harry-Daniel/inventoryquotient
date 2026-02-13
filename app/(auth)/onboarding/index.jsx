@@ -25,10 +25,10 @@ const Onboarding = () => {
       source={IMAGES.authBg}
     >
       <View className="flex flex-col justify-center items-center absolute top-[30%] gap-2 ">
-        <View className="   justify-center items-center p-4 rounded-2xl shadow-2xl shadow-black elevation-10">
+        <View className="   justify-center items-center p-4 rounded-2xl ">
           <Image
             source={IMAGES.logo}
-            className="w-48 h-48"
+            className="w-40 h-40"
             resizeMode="contain"
           />
         </View>
