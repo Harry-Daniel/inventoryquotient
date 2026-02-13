@@ -113,7 +113,7 @@ const EditProfile = () => {
 
   return (
     <View
-      className=" gap-8 py-12 flex flex-col"
+      className=" gap-8 py-12 flex flex-col bg-white"
       style={{ width: width, height: height }}
     >
       <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
