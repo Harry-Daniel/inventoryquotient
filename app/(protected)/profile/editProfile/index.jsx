@@ -93,20 +93,17 @@ const EditProfile = () => {
       existingProfileResult.success &&
       isEqual(existingProfileResult.data, result.data);
 
-    if (isSame) {
-      Toast.show({
-        type: "info",
-        text1: "No changes detected",
-        text2: "No changes were made",
-      });
-      return;
-    }
-
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Changes have been saved",
-    });
+    isSame
+      ? Toast.show({
+          type: "info",
+          text1: "No changes detected",
+          text2: "No changes were made",
+        })
+      : Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Changes have been saved",
+        });
 
     router.back();
   };
