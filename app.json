@@ -21,14 +21,22 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.harryd.inventoryquotient"
     },
     "web": {
       "bundler": "metro",
       "favicon": "./assets/logo.png"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9deab83f-4495-4e68-bd80-a19e344ae187"
+      }
+    },
+    "owner": "harryd"
   }
 }

@@ -72,11 +72,12 @@ const SignIn = () => {
                 setUserDetails((prev) => ({ ...prev, email: text }))
               }
               placeholder="Enter email address"
+              placeholderTextColor="#4b5563"
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               textContentType="emailAddress"
-              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
+              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2 text-black"
             />
           </View>
           {/* Password */}
@@ -90,11 +91,12 @@ const SignIn = () => {
                   setUserDetails((prev) => ({ ...prev, password: text }))
                 }
                 placeholder="Enter password"
+                placeholderTextColor="#4b5563"
                 secureTextEntry={hidePassword}
                 autoCapitalize="none"
                 autoCorrect={false}
                 textContentType="password"
-                className="border rounded-lg border-gray-400 focus:border-gray-600  p-2 pr-14 flex-1"
+                className="border rounded-lg border-gray-400 focus:border-gray-600  p-2 pr-14 flex-1 text-black"
               />
               {hidePassword ? (
                 <AntDesign
@@ -121,6 +123,8 @@ const SignIn = () => {
               <Switch
                 value={isChecked}
                 onValueChange={() => setIsChecked(!isChecked)}
+                trackColor={{ false: "#ccc", true: "#1e3a8a" }} 
+              thumbColor={isChecked ? "#1e3a8a" : "#f9fafb"}
               />
               <Text className="text-sm text-blue-900">Remember Me</Text>
             </View>

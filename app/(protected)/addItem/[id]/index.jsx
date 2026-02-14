@@ -137,7 +137,7 @@ const AddItem = () => {
   };
   return (
     <View
-      className=" gap-12 py-12 flex flex-col"
+      className=" gap-12 py-12 flex flex-col bg-white"
       style={{ width: width, height: height }}
     >
       <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2 ">
@@ -155,12 +155,14 @@ const AddItem = () => {
               setItemDetails((prev) => ({ ...prev, title: text }))
             }
             placeholder="Enter item name"
+            placeholderTextColor="#4b5563"
             autoCapitalize="none"
             autoCorrect={true}
             className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
           />
         </View>
       </View>
+   
 
       {/* Quantity of item */}
       <View className="px-[4%]">
@@ -174,6 +176,7 @@ const AddItem = () => {
               setItemDetails((prev) => ({ ...prev, quantity: text }))
             }
             placeholder="Enter quantity"
+            placeholderTextColor="#4b5563"
             className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
             keyboardType="numeric"
           />
@@ -192,6 +195,7 @@ const AddItem = () => {
               setItemDetails((prev) => ({ ...prev, storagePlace: text }))
             }
             placeholder="Enter storage location"
+            placeholderTextColor="#4b5563"
             autoCapitalize="none"
             autoCorrect={true}
             textAlignVertical="top"

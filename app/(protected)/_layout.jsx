@@ -4,6 +4,7 @@ import { Slot, Redirect, usePathname } from "expo-router";
 import { useAuthetication } from "../../store/store";
 import { StyleSheet, Text, View } from "react-native";
 import NavBar from "../../components/navBar";
+import { StatusBar } from "expo-status-bar";
 
 export default function ProtectedLayout() {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export default function ProtectedLayout() {
   return (
     <View>
       <View className="flex-1">
+        <StatusBar style="dark"/>
         <Slot />
         {!hideNavbar && <NavBar />}
         <Toast />

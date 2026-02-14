@@ -93,27 +93,24 @@ const EditProfile = () => {
       existingProfileResult.success &&
       isEqual(existingProfileResult.data, result.data);
 
-    if (isSame) {
-      Toast.show({
-        type: "info",
-        text1: "No changes detected",
-        text2: "No changes were made",
-      });
-      return;
-    }
-
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Changes have been saved",
-    });
+    isSame
+      ? Toast.show({
+          type: "info",
+          text1: "No changes detected",
+          text2: "No changes were made",
+        })
+      : Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: "Changes have been saved",
+        });
 
     router.back();
   };
 
   return (
     <View
-      className=" gap-8 py-12 flex flex-col"
+      className=" gap-8 py-12 flex flex-col bg-white"
       style={{ width: width, height: height }}
     >
       <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
