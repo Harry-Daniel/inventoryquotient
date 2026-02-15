@@ -25,7 +25,7 @@ const ItemDetail = () => {
       <StatusBar style="light" />
       <View className="relative w-full h-[45%] flex items-center">
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: item.image_url }}
           alt="Item Image"
           className="w-full h-full "
         />

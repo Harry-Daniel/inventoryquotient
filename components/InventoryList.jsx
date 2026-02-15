@@ -11,9 +11,7 @@ const InventoryList = () => {
     const getItems = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          "https://69612cd4e7aa517cb79845d3.mockapi.io/items"
-        );
+        const response = await fetch("http://10.0.2.2:8000/inventory/items/");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

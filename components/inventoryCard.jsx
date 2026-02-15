@@ -17,7 +17,7 @@ const InventoryCard = ({ items }) => {
     >
       <View className="h-28 w-full rounded-xl bg-blue-950 overflow-hidden flex-row shadow-md">
         <Image
-          source={{uri: item.image}}
+          source={{ uri: item.image_url }}
           className="h-full w-[40%]"
           resizeMode="cover"
         />
@@ -29,7 +29,9 @@ const InventoryCard = ({ items }) => {
           {/* Hard-coded quantity */}
           <View className="bg-blue-100 flex-row items-center rounded-md px-2 self-start gap-1">
             <MaterialIcons name="inventory" size={10} color="#1e40af" />
-            <Text className="text-blue-800 text-xs font-bold">{item.inventory}</Text>
+            <Text className="text-blue-800 text-xs font-bold">
+              {item.inventory}
+            </Text>
           </View>
 
           {/* Hard-coded location */}

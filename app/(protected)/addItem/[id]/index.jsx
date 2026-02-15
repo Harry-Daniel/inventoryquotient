@@ -63,14 +63,14 @@ const AddItem = () => {
   const item = indexedList[id];
 
   const [existingItemDetails, setexistingItemDetails] = useState({
-    image: item?.image || undefined,
+    image: item?.image_url || undefined,
     title: item?.name || "",
     quantity: item?.inventory.toString() || "",
     storagePlace: item?.description || "",
   });
 
   const [itemDetails, setItemDetails] = useState({
-    image: item?.image || undefined,
+    image: item?.image_url || undefined,
     title: item?.name || "",
     quantity: item?.inventory.toString() || "",
     storagePlace: item?.description || "",
@@ -162,7 +162,6 @@ const AddItem = () => {
           />
         </View>
       </View>
-   
 
       {/* Quantity of item */}
       <View className="px-[4%]">
