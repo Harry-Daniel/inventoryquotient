@@ -17,9 +17,17 @@ import { IMAGES } from "../../../constants";
 const { width, height } = Dimensions.get("screen");
 const SignUp = () => {
   const signUpSchema = z.object({
-    fullname: z
+    username: z
       .string()
-      .min(1, "Fullname field is required")
+      .min(1, "Username field is required")
+      .max(255, "You have exceeded the character limit for fullname"),
+    first_name: z
+      .string()
+      .min(1, "First name field is required")
+      .max(255, "You have exceeded the character limit for fullname"),
+    last_name: z
+      .string()
+      .min(1, "Last name field is required")
       .max(255, "You have exceeded the character limit for fullname"),
     email: z.email("A valid email is required"),
     password: z.string().min(1, "Password Field is required"),
@@ -28,7 +36,9 @@ const SignUp = () => {
   const router = useRouter();
 
   const [userDetails, setUserDetails] = useState({
-    fullname: "",
+    username: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
@@ -38,15 +48,39 @@ const SignUp = () => {
 
   // simulating on submit
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
+    setErrors([]);
     const result = signUpSchema.safeParse(userDetails);
+
     if (!result.success) {
       const errorMessages = result.error.issues.map((issue) => issue.message);
       setErrors(errorMessages);
       return;
     }
+    if (!isChecked) {
+      setErrors(["You must agree to processing of data"]);
+      return;
+    }
 
-    setErrors([]);
+    try {
+      const response = await fetch("http://10.0.2.2:8000/auth/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result.data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const formattedErrors = Object.values(errorData).flat();
+        setErrors(formattedErrors);
+        return;
+      }
+    } catch (error) {
+      console.error("fetch failed", error);
+    }
+
     router.replace({ pathname: "/signIn" });
   };
 
@@ -62,16 +96,54 @@ const SignUp = () => {
         </Text>
         {/* form fields */}
         <View className="flex gap-8">
-          {/* fullname */}
+          {/* Username */}
           <View className="relative">
             <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
-              <Text className="text-xs">Fullname</Text>
+              <Text className="text-xs">Username</Text>
             </View>
             <TextInput
               onChangeText={(text) =>
-                setUserDetails((prev) => ({ ...prev, fullname: text }))
+                setUserDetails((prev) => ({ ...prev, username: text }))
               }
-              placeholder="Enter full name"
+              placeholder="Enter username"
+              placeholderTextColor="#4b5563"
+              keyboardType="default"
+              autoCapitalize="words"
+              autoCorrect={false}
+              textContentType="name"
+              returnKeyType="next"
+              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2 text-black"
+            />
+          </View>
+          {/* First Name */}
+          <View className="relative">
+            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
+              <Text className="text-xs">First Name</Text>
+            </View>
+            <TextInput
+              onChangeText={(text) =>
+                setUserDetails((prev) => ({ ...prev, first_name: text }))
+              }
+              placeholder="Enter first name(s)"
+              placeholderTextColor="#4b5563"
+              keyboardType="default"
+              autoCapitalize="words"
+              autoCorrect={false}
+              textContentType="name"
+              returnKeyType="next"
+              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2 text-black"
+            />
+          </View>
+          {/* Lastname */}
+          <View className="relative">
+            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
+              <Text className="text-xs">Last Name</Text>
+            </View>
+            <TextInput
+              onChangeText={(text) =>
+                setUserDetails((prev) => ({ ...prev, last_name: text }))
+              }
+              placeholder="Enter last name"
               placeholderTextColor="#4b5563"
               keyboardType="default"
               autoCapitalize="words"
@@ -142,7 +214,7 @@ const SignUp = () => {
             <Switch
               value={isChecked}
               onValueChange={() => setIsChecked(!isChecked)}
-              trackColor={{ false: "#ccc", true: "#1e3a8a" }} 
+              trackColor={{ false: "#ccc", true: "#1e3a8a" }}
               thumbColor={isChecked ? "#1e3a8a" : "#f9fafb"}
             />
             <Text className="text-sm text-blue-900">
