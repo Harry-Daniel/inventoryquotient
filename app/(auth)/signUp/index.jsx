@@ -1,4 +1,5 @@
 import { z } from "zod";
+import Toast from "react-native-toast-message";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -81,6 +82,11 @@ const SignUp = () => {
       console.error("fetch failed", error);
     }
 
+    Toast.show({
+      type: "success",
+      text1: `${userDetails.username} signed up`,
+      text2: "Go ahead and sign in",
+    });
     router.replace({ pathname: "/signIn" });
   };
 
