@@ -16,7 +16,7 @@ export default function ProtectedLayout() {
 
   const { authenticated } = useAuthetication();
   if (!authenticated) {
-    return <Redirect href="/onboarding" />;
+    return <Redirect href="/auth" />;
   }
 
   return (

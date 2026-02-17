@@ -123,8 +123,8 @@ const SignIn = () => {
               <Switch
                 value={isChecked}
                 onValueChange={() => setIsChecked(!isChecked)}
-                trackColor={{ false: "#ccc", true: "#1e3a8a" }} 
-              thumbColor={isChecked ? "#1e3a8a" : "#f9fafb"}
+                trackColor={{ false: "#ccc", true: "#1e3a8a" }}
+                thumbColor={isChecked ? "#1e3a8a" : "#f9fafb"}
               />
               <Text className="text-sm text-blue-900">Remember Me</Text>
             </View>
@@ -143,7 +143,7 @@ const SignIn = () => {
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Don't have an account?</Text>
           <TouchableOpacity
-            onPress={() => router.replace({ pathname: "/signUp" })}
+            onPress={() => router.replace({ pathname: "/auth/signUp" })}
           >
             <Text className="text-blue-900 ">Sign Up</Text>
           </TouchableOpacity>
