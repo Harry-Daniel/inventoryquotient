@@ -32,6 +32,13 @@ const InventoryList = () => {
   if (isloading && inventoryItems.length < 1) {
     return <Text className="text-center text-blue-950">Loading...</Text>;
   }
+  if (!isloading && inventoryItems.length < 1) {
+    return (
+      <Text className="text-center text-blue-950">
+        Add some items and watch me keep track of them
+      </Text>
+    );
+  }
   return (
     <View className="w-auto h-[52vh]">
       <InventoryCard items={inventoryItems} />
