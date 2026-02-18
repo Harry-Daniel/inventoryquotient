@@ -1,4 +1,5 @@
 import { z } from "zod";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -35,7 +36,7 @@ const SignIn = () => {
 
   // simulating on submit
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = async () => {
     const result = signInSchema.safeParse(userDetails);
 
     if (!result.success) {
@@ -43,9 +44,32 @@ const SignIn = () => {
       setErrors(errorMessages);
       return;
     }
+    try {
+      const response = await fetch("http://10.0.2.2:8000/auth/jwt/create/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result.data),
+      });
+
+      const data = await response.json();
+
+      await AsyncStorage.setItem("access_token", data.access);
+      await AsyncStorage.setItem("refresh_token", data.refresh);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const formattedErrors = Object.values(errorData).flat();
+        setErrors(formattedErrors);
+        return;
+      }
+    } catch (error) {
+      console.error("fetch failed", error);
+    }
 
     setErrors([]);
-    login();
+    // login();
     router.replace({ pathname: "/" });
   };
 
