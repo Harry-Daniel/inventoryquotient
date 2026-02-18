@@ -57,6 +57,7 @@ const SignIn = () => {
 
       await AsyncStorage.setItem("access_token", data.access);
       await AsyncStorage.setItem("refresh_token", data.refresh);
+      login();
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -69,7 +70,6 @@ const SignIn = () => {
     }
 
     setErrors([]);
-    // login();
     router.replace({ pathname: "/" });
   };
 
