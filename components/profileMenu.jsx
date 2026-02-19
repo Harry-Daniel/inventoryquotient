@@ -1,5 +1,7 @@
 import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { useAuthetication } from "../store/store";
 import { useRouter } from "expo-router";
 
@@ -39,7 +41,10 @@ const ProfileMenu = () => {
 
       {/* Logout */}
       <TouchableOpacity
-        onPress={() => logout()}
+        onPress={async () => {
+          await AsyncStorage.clear();
+          logout();
+        }}
         className="flex flex-row items-center justify-between py-4"
       >
         <View className="flex flex-row  gap-3 items-center">

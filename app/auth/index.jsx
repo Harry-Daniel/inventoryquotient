@@ -6,17 +6,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
-import { IMAGES } from "../../../constants";
+import { IMAGES } from "../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const Onboarding = () => {
   const router = useRouter();
 
-  const onPressSignIn = () => router.replace({ pathname: "/signIn" });
+  const onPressSignIn = () => router.replace({ pathname: "/auth/signIn" });
 
-  const onPressSignUp = () => router.replace({ pathname: "/signUp" });
+  const onPressSignUp = () => router.replace({ pathname: "/auth/signUp" });
 
   return (
     <ImageBackground

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import Toast from "react-native-toast-message";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -81,7 +82,12 @@ const SignUp = () => {
       console.error("fetch failed", error);
     }
 
-    router.replace({ pathname: "/signIn" });
+    Toast.show({
+      type: "success",
+      text1: `${userDetails.username} signed up`,
+      text2: "Go ahead and sign in",
+    });
+    router.replace({ pathname: "/auth/signIn" });
   };
 
   return (
@@ -232,7 +238,7 @@ const SignUp = () => {
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
           <TouchableOpacity
-            onPress={() => router.replace({ pathname: "/signIn" })}
+            onPress={() => router.replace({ pathname: "/auth/signIn" })}
           >
             <Text className="text-blue-900 ">Sign In</Text>
           </TouchableOpacity>
