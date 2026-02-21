@@ -45,7 +45,7 @@ const SignIn = () => {
       return;
     }
     try {
-      const response = await fetch("http://10.0.2.2:8000/auth/jwt/create/", {
+      const response = await fetch("http://192.168.100.43:8000/auth/jwt/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

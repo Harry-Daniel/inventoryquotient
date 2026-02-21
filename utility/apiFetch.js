@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const apiFetch = async (fetchUrl, options = {}, router) => {
+const apiFetch = async (fetchUrl, router, options = {}) => {
   let token = await AsyncStorage.getItem("access_token");
 
   if (!token) {
@@ -29,7 +29,7 @@ const apiFetch = async (fetchUrl, options = {}, router) => {
     }
 
     const refreshResponse = await fetch(
-      "http://10.0.2.2:8000/auth/jwt/refresh/",
+      "http://192.168.100.43:8000/auth/jwt/refresh/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

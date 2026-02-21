@@ -64,7 +64,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await fetch("http://10.0.2.2:8000/auth/users/", {
+      const response = await fetch("http://192.168.100.43:8000/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

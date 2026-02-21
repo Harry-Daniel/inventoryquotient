@@ -1,5 +1,7 @@
 import { Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
+
 import NetInfo from "@react-native-community/netinfo";
 
 import InventoryCard from "./inventoryCard";
@@ -24,19 +26,24 @@ const InventoryList = () => {
           console.log("Offline — loading cache");
 
           const cached = await AsyncStorage.getItem("inventory_cache");
-          // Put Toast here informing them that cache is loadin
+          // router.replace({ pathname: "/auth/signIn" });
 
           if (cached) {
             const parsed = JSON.parse(cached);
             setInventoryItems(parsed);
             setIndexedList(parsed);
+            Toast.show({
+              type: "info",
+              text1: "Could not load current data",
+              text2: "Check your internet connection",
+            });
           }
 
           return;
         }
 
         const data = await apiFetch(
-          "http://10.0.2.2:8000/inventory/items/",
+          "http://192.168.100.43:8000/inventory/items/",
           router,
         );
 
@@ -45,8 +52,13 @@ const InventoryList = () => {
         setInventoryItems(data);
         setIndexedList(data);
       } catch (error) {
-        // Put Toast here informing them that cache is loadin
-        console.error("fetch failed", error);
+        Toast.show({
+          type: "error",
+          text1: "Something went wrong",
+          text2:
+            "Could not load current data. If this persists, contact support",
+        });
+        // console.error("fetch failed", error);
         const cached = await AsyncStorage.getItem("inventory_cache");
 
         if (cached) {
