@@ -5,3 +5,5 @@ export const IMAGES = {
   logo: require("./assets/logo.png"),
   hero: require("./assets/images/hero.jpg"),
 };
+
+export const URL= ""
