@@ -6,4 +6,4 @@ export const IMAGES = {
   hero: require("./assets/images/hero.jpg"),
 };
 
-export const URL= ""
+export const URL = "192.168.100.43:8000";

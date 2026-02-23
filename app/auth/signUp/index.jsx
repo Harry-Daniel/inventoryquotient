@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../constants";
+import { IMAGES, URL } from "../../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const SignUp = () => {
@@ -64,7 +64,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await fetch("http://192.168.100.43:8000/auth/users/", {
+      const response = await fetch(`http://${URL}/auth/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

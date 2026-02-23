@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useData } from "../store/store";
 import { useRouter } from "expo-router";
 import apiFetch from "../utility/apiFetch";
+import { URL } from "../constants";
 
 const InventoryList = () => {
   const { setInventoryItems, inventoryItems, setIndexedList } = useData();
@@ -43,7 +44,7 @@ const InventoryList = () => {
         }
 
         const data = await apiFetch(
-          "http://192.168.100.43:8000/inventory/items/",
+          `http://${URL}/inventory/items/`,
           router,
         );
 

@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../constants";
+import { IMAGES, URL } from "../../../constants";
 import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
@@ -45,7 +45,7 @@ const SignIn = () => {
       return;
     }
     try {
-      const response = await fetch("http://192.168.100.43:8000/auth/jwt/create/", {
+      const response = await fetch(`http://${URL}/auth/jwt/create/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
