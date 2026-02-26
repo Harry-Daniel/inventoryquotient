@@ -1,4 +1,5 @@
 import { set, z } from "zod";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import isEqual from "lodash.isequal";
 import Toast from "react-native-toast-message";
 import * as ImagePicker from "expo-image-picker";
@@ -14,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { useData } from "../../../../store/store";
+import { URL } from "../../../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const AddItem = () => {
@@ -61,7 +63,7 @@ const AddItem = () => {
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
-
+  console.log(item);
   const [existingItemDetails, setexistingItemDetails] = useState({
     image: item?.image_url || undefined,
     title: item?.name || "",
@@ -102,38 +104,74 @@ const AddItem = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const existingItemResult = itemSchema.safeParse(existingItemDetails);
-    const result = itemSchema.safeParse(itemDetails);
-    const is_same = isEqual(existingItemResult, result);
+  const handleSubmit = async () => {
+    try {
+      const existingItemResult = itemSchema.safeParse(existingItemDetails);
+      const result = itemSchema.safeParse(itemDetails);
+      const is_same = isEqual(existingItemResult, result);
 
-    if (!result.success) {
-      setErrors(result.error.issues.map((issue) => issue.message));
-      // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
-      itemDetails.image
-        ? null
-        : setErrors((prev) => [
-            ...prev.filter((error) => error !== "Invalid input"),
-            "Image is required",
-          ]);
-      return;
-    }
+      if (!result.success) {
+        setErrors(result.error.issues.map((issue) => issue.message));
+        // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
+        itemDetails.image
+          ? null
+          : setErrors((prev) => [
+              ...prev.filter((error) => error !== "Invalid input"),
+              "Image is required",
+            ]);
+        return;
+      }
 
-    setErrors([]);
-    is_same
-      ? Toast.show({
-          type: "info",
-          text1: "No changes detected",
-          text2: `No changes were made to ${result.data.title}`,
-        })
-      : Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: item
-            ? `${result.data.title} details updated successfully`
-            : `${result.data.title} added successfully`,
+      if (!item) {
+        const formData = new FormData();
+        const accessToken = await AsyncStorage.getItem("access_token");
+        formData.append("name", result.data.title);
+        formData.append("inventory", result.data.quantity);
+        formData.append("description", result.data.storagePlace);
+
+        if (result.data.image && !result.data.image.startsWith("http")) {
+          formData.append("image", {
+            uri: result.data.image,
+            name: "photo.jpg",
+            type: "image/jpeg",
+          });
+        }
+
+        const response = await fetch(`http://${URL}/inventory/items/`, {
+          method: "POST",
+          headers: {
+            Authorization: `JWT ${accessToken}`, // only this
+          },
+          body: formData,
         });
-    router.back();
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to create item");
+        }
+
+        console.log("Item created:", data);
+      }
+
+      setErrors([]);
+      is_same
+        ? Toast.show({
+            type: "info",
+            text1: "No changes detected",
+            text2: `No changes were made to ${result.data.title}`,
+          })
+        : Toast.show({
+            type: "success",
+            text1: "Success",
+            text2: item
+              ? `${result.data.title} details updated successfully`
+              : `${result.data.title} added successfully`,
+          });
+      router.back();
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <View
