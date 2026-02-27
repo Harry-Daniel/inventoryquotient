@@ -152,7 +152,7 @@ const AddItem = () => {
         }
         const data = await response.json();
 
-        console.log("Item created:", data);
+        // console.log("Item created:", data);
       }
 
       setErrors([]);
@@ -171,7 +171,13 @@ const AddItem = () => {
           });
       router.back();
     } catch (error) {
-      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: item
+          ? `${result.data.title} details did not update`
+          : `${result.data.title} not added`,
+      });
       return;
     }
   };
