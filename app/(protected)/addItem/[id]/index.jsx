@@ -63,7 +63,7 @@ const AddItem = () => {
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
-  console.log(item);
+  // console.log(item);
   const [existingItemDetails, setexistingItemDetails] = useState({
     image: item?.image_url || undefined,
     title: item?.name || "",
@@ -145,11 +145,12 @@ const AddItem = () => {
           body: formData,
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-          throw new Error(data.error || "Failed to create item");
+          const badResponse = await response.json();
+          setErrors([badResponse.error]);
+          return;
         }
+        const data = await response.json();
 
         console.log("Item created:", data);
       }
@@ -171,6 +172,7 @@ const AddItem = () => {
       router.back();
     } catch (error) {
       console.error(error);
+      return;
     }
   };
   return (
