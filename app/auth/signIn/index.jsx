@@ -53,18 +53,18 @@ const SignIn = () => {
         body: JSON.stringify(result.data),
       });
 
-      const data = await response.json();
-
-      await AsyncStorage.setItem("access_token", data.access);
-      await AsyncStorage.setItem("refresh_token", data.refresh);
-      login();
-
       if (!response.ok) {
         const errorData = await response.json();
         const formattedErrors = Object.values(errorData).flat();
         setErrors(formattedErrors);
         return;
       }
+
+      const data = await response.json();
+
+      await AsyncStorage.setItem("access_token", data.access);
+      await AsyncStorage.setItem("refresh_token", data.refresh);
+      login();
     } catch (error) {
       console.error("fetch failed", error);
     }
