@@ -79,7 +79,13 @@ const SignUp = () => {
         return;
       }
     } catch (error) {
-      console.error("fetch failed", error);
+      Toast.show({
+        type: "error",
+        text1: `${userDetails.username} sign up failed`,
+        text2: "Try again",
+      });
+      return;
+      // console.error("fetch failed", error);
     }
 
     Toast.show({
