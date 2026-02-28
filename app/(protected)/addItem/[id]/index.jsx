@@ -104,12 +104,9 @@ const AddItem = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const createItem = async () => {
+    const result = itemSchema.safeParse(itemDetails);
     try {
-      const existingItemResult = itemSchema.safeParse(existingItemDetails);
-      const result = itemSchema.safeParse(itemDetails);
-      const is_same = isEqual(existingItemResult, result);
-
       if (!result.success) {
         setErrors(result.error.issues.map((issue) => issue.message));
         // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
@@ -122,54 +119,44 @@ const AddItem = () => {
         return;
       }
 
-      if (!item) {
-        const formData = new FormData();
-        const accessToken = await AsyncStorage.getItem("access_token");
-        formData.append("name", result.data.title);
-        formData.append("inventory", result.data.quantity);
-        formData.append("description", result.data.storagePlace);
+      const formData = new FormData();
+      const accessToken = await AsyncStorage.getItem("access_token");
+      formData.append("name", result.data.title);
+      formData.append("inventory", result.data.quantity);
+      formData.append("description", result.data.storagePlace);
 
-        if (result.data.image && !result.data.image.startsWith("http")) {
-          formData.append("image", {
-            uri: result.data.image,
-            name: "photo.jpg",
-            type: "image/jpeg",
-          });
-        }
-
-        const response = await fetch(`http://${URL}/inventory/items/`, {
-          method: "POST",
-          headers: {
-            Authorization: `JWT ${accessToken}`, // only this
-          },
-          body: formData,
+      if (result.data.image && !result.data.image.startsWith("http")) {
+        formData.append("image", {
+          uri: result.data.image,
+          name: "photo.jpg",
+          type: "image/jpeg",
         });
+      }
 
-        if (!response.ok) {
-          const badResponse = await response.json();
-          setErrors([badResponse.error]);
-          return;
-        }
-        const data = await response.json();
+      const response = await fetch(`http://${URL}/inventory/items/`, {
+        method: "POST",
+        headers: {
+          Authorization: `JWT ${accessToken}`, // only this
+        },
+        body: formData,
+      });
 
-        // console.log("Item created:", data);
+      if (!response.ok) {
+        const badResponse = await response.json();
+        setErrors([badResponse.error]);
+        return;
       }
 
       setErrors([]);
-      is_same
-        ? Toast.show({
-            type: "info",
-            text1: "No changes detected",
-            text2: `No changes were made to ${result.data.title}`,
-          })
-        : Toast.show({
-            type: "success",
-            text1: "Success",
-            text2: item
-              ? `${result.data.title} details updated successfully`
-              : `${result.data.title} added successfully`,
-          });
+
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: `${result.data.title} added successfully`,
+      });
+
       router.back();
+      return;
     } catch (error) {
       Toast.show({
         type: "error",
@@ -180,6 +167,157 @@ const AddItem = () => {
       });
       return;
     }
+  };
+
+  const updateItem = async () => {
+    const existingItemResult = itemSchema.safeParse(existingItemDetails);
+    const result = itemSchema.safeParse(itemDetails);
+    const is_same = isEqual(existingItemResult, result);
+    try {
+      if (!result.success) {
+        setErrors(result.error.issues.map((issue) => issue.message));
+        // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
+        itemDetails.image
+          ? null
+          : setErrors((prev) => [
+              ...prev.filter((error) => error !== "Invalid input"),
+              "Image is required",
+            ]);
+        return;
+      }
+
+      const formData = new FormData();
+      const accessToken = await AsyncStorage.getItem("access_token");
+      formData.append("name", result.data.title);
+      formData.append("inventory", result.data.quantity);
+      formData.append("description", result.data.storagePlace);
+      formData.append("image_public_id", item.image_public_id);
+      // formData.append("image_url", result.data.image);
+
+      if (result.data.image && !result.data.image.startsWith("http")) {
+        formData.append("image", {
+          uri: result.data.image,
+          name: "photo.jpg",
+          type: "image/jpeg",
+        });
+      }
+
+      const response = await fetch(
+        `http://${URL}/inventory/items/${item.id}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `JWT ${accessToken}`, // only this
+          },
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        const badResponse = await response.json();
+        setErrors([badResponse.error]);
+        return;
+      }
+
+      setErrors([]);
+      console.log(result);
+      is_same
+        ? Toast.show({
+            type: "info",
+            text1: "No changes detected",
+            text2: `No changes were made to ${result.data.title}`,
+          })
+        : Toast.show({
+            type: "success",
+            text1: "Success",
+            text2: `${result.data.title} details updated successfully`,
+          });
+      router.push("/");
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Failed",
+        text2: `${result.data.title} details did not update`,
+      });
+      return;
+    }
+  };
+
+  const handleSubmit = async () => {
+    // try {
+    //   const existingItemResult = itemSchema.safeParse(existingItemDetails);
+    //   const result = itemSchema.safeParse(itemDetails);
+    //   const is_same = isEqual(existingItemResult, result);
+
+    //   if (!result.success) {
+    //     setErrors(result.error.issues.map((issue) => issue.message));
+    //     // Allowing meaningful message to th user : If no item image is provided, remove iInvalid input from array and put image is required instead
+    //     itemDetails.image
+    //       ? null
+    //       : setErrors((prev) => [
+    //           ...prev.filter((error) => error !== "Invalid input"),
+    //           "Image is required",
+    //         ]);
+    //     return;
+    //   }
+
+    //   if (!item) {
+    //     const formData = new FormData();
+    //     const accessToken = await AsyncStorage.getItem("access_token");
+    //     formData.append("name", result.data.title);
+    //     formData.append("inventory", result.data.quantity);
+    //     formData.append("description", result.data.storagePlace);
+
+    //     if (result.data.image && !result.data.image.startsWith("http")) {
+    //       formData.append("image", {
+    //         uri: result.data.image,
+    //         name: "photo.jpg",
+    //         type: "image/jpeg",
+    //       });
+    //     }
+
+    //     const response = await fetch(`http://${URL}/inventory/items/`, {
+    //       method: "POST",
+    //       headers: {
+    //         Authorization: `JWT ${accessToken}`, // only this
+    //       },
+    //       body: formData,
+    //     });
+
+    //     if (!response.ok) {
+    //       const badResponse = await response.json();
+    //       setErrors([badResponse.error]);
+    //       return;
+    //     }
+    //   }
+
+    //   setErrors([]);
+    //   is_same
+    //     ? Toast.show({
+    //         type: "info",
+    //         text1: "No changes detected",
+    //         text2: `No changes were made to ${result.data.title}`,
+    //       })
+    //     : Toast.show({
+    //         type: "success",
+    //         text1: "Success",
+    //         text2: item
+    //           ? `${result.data.title} details updated successfully`
+    //           : `${result.data.title} added successfully`,
+    //       });
+    //   router.back();
+    // } catch (error) {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Failed",
+    //     text2: item
+    //       ? `${result.data.title} details did not update`
+    //       : `${result.data.title} not added`,
+    //   });
+    //   return;
+    // }
+
+    item ? updateItem() : createItem();
   };
   return (
     <View
