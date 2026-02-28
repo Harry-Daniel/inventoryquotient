@@ -33,10 +33,12 @@ const SignIn = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // simulating on submit
 
   const handleOnSubmit = async () => {
+    setIsLoading(true);
     const result = signInSchema.safeParse(userDetails);
 
     if (!result.success) {
@@ -70,6 +72,7 @@ const SignIn = () => {
     }
 
     setErrors([]);
+    setIsLoading(false);
     router.replace({ pathname: "/" });
   };
 
@@ -162,7 +165,9 @@ const SignIn = () => {
           className="bg-blue-900 p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
-          <Text className="text-white m-auto">Sign In</Text>
+          <Text className="text-white m-auto">
+            {isLoading ? "Loading..." : "Sign In"}
+          </Text>
         </TouchableOpacity>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Don't have an account?</Text>

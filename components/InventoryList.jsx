@@ -24,7 +24,7 @@ const InventoryList = () => {
         const netState = await NetInfo.fetch();
 
         if (!netState.isConnected || !netState.isInternetReachable) {
-          console.log("Offline — loading cache");
+          // console.log("Offline — loading cache");
 
           const cached = await AsyncStorage.getItem("inventory_cache");
           // router.replace({ pathname: "/auth/signIn" });

@@ -46,6 +46,7 @@ const SignUp = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // simulating on submit
 
@@ -239,7 +240,9 @@ const SignUp = () => {
           className="bg-blue-900  p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
-          <Text className="text-white m-auto">Sign Up</Text>
+          <Text className="text-white m-auto">
+            {isLoading ? "Loading..." : "Sign Up"}
+          </Text>
         </TouchableOpacity>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
