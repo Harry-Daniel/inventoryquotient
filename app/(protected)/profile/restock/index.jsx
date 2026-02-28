@@ -1,12 +1,30 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import InventoryCard from "../../../../components/inventoryCard";
 import { useData } from "../../../../store/store";
+import { useEffect, useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
 
 const Restock = () => {
-  const { inventoryItems } = useData();
+  const [restockList, setRestockList] = useState();
+  const { indexedList } = useData();
+
+  useEffect(() => {
+    const fetchRestockList = async () => {
+      const stored = await AsyncStorage.getItem("restockList");
+      const restockIds = stored ? JSON.parse(stored) : [];
+
+      const restockItems = restockIds
+        .map((id) => indexedList[id]) // get object by id
+        .filter(Boolean); // remove undefined if id not found
+
+      setRestockList(restockItems);
+    };
+
+    fetchRestockList();
+  }, []);
+
   return (
     <View
       className=" gap-6 py-12 flex flex-col bg-white"
@@ -16,7 +34,7 @@ const Restock = () => {
         Restock List
       </Text>
 
-      <InventoryCard items={inventoryItems}/>
+      <InventoryCard items={restockList} />
     </View>
   );
 };

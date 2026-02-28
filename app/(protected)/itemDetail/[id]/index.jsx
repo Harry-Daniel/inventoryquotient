@@ -1,3 +1,5 @@
+import Toast from "react-native-toast-message";
+
 import {
   Dimensions,
   Image,
@@ -7,11 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IMAGES } from "../../../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useData } from "../../../../store/store";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
 const ItemDetail = () => {
@@ -19,6 +23,64 @@ const ItemDetail = () => {
   const { id } = useLocalSearchParams();
   const { indexedList } = useData();
   const item = indexedList[id];
+  const [isRestockedItem, setIsRestockedItem] = useState(false);
+
+  const toggleRestockItem = async (id) => {
+    try {
+      const stored = await AsyncStorage.getItem("restockList");
+      const restockList = stored ? JSON.parse(stored) : [];
+
+      const idString = String(id); // normalize type
+
+      let updatedList;
+
+      if (restockList.includes(idString)) {
+        // 🔹 Remove it
+        updatedList = restockList.filter((itemId) => itemId !== idString);
+        Toast.show({
+          type: "success",
+          text1: "Item removed",
+          text2: `${item.name} has been removed to restock list`,
+        });
+      } else {
+        // 🔹 Add it
+        updatedList = [...restockList, idString];
+        Toast.show({
+          type: "success",
+          text1: "Item added",
+          text2: `${item.name} has been added to restock list`,
+        });
+      }
+
+      await AsyncStorage.setItem("restockList", JSON.stringify(updatedList));
+      setIsRestockedItem(!isRestockedItem);
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Item couldn't be added",
+        text2: `${item.name} wasn't added to restock list`,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const checkIsRestockedItem = async () => {
+      try {
+        const stored = await AsyncStorage.getItem("restockList");
+        const restockIds = stored ? JSON.parse(stored) : [];
+
+        if (restockIds.includes(String(id))) {
+          setIsRestockedItem(true);
+        } else {
+          setIsRestockedItem(false);
+        }
+      } catch (error) {
+        console.log("Error checking restock list:", error);
+      }
+    };
+
+    checkIsRestockedItem();
+  }, [id]);
 
   return (
     <View className="flex flex-col  h-[100vh]">
@@ -67,9 +129,12 @@ const ItemDetail = () => {
                 Manage Inventory
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-blue-950  rounded-full py-4 ">
+            <TouchableOpacity
+              onPress={() => toggleRestockItem(id)}
+              className="bg-blue-950  rounded-full py-4 "
+            >
               <Text className="text-center font-semibold text-white">
-                Add to Restock List
+                {isRestockedItem ? "Remove from list" : "Add to Restock List"}
               </Text>
             </TouchableOpacity>
           </View>
