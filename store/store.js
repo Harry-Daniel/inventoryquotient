@@ -8,10 +8,15 @@ export const useAuthetication = create((set) => ({
 
 export const useData = create((set) => ({
   inventoryItems: [],
-  indexedList:[],
+  indexedList: [],
   setInventoryItems: (data) => set({ inventoryItems: data }),
   setIndexedList: (newItems) =>
     set({
       indexedList: Object.fromEntries(newItems.map((i) => [i.id, i])),
     }),
+}));
+
+export const useProfile = create((set) => ({
+  profile: {},
+  setProfile: (data) => set({ profile: data }),
 }));
