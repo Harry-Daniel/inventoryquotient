@@ -20,6 +20,8 @@ import { IMAGES } from "../../../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
+
+  // add use effect for loading profile details from cache
   const imageAssetSchema = z
     .union([
       z.object({
@@ -56,6 +58,7 @@ const EditProfile = () => {
   const [errors, setErrors] = useState([]);
 
   const router = useRouter();
+
 
   // Picking Image
   const pickImage = async () => {
