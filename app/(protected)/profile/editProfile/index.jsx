@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -17,11 +17,12 @@ import {
   View,
 } from "react-native";
 import { IMAGES } from "../../../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
-
   // add use effect for loading profile details from cache
+
   const imageAssetSchema = z
     .union([
       z.object({
@@ -34,31 +35,25 @@ const EditProfile = () => {
       }),
       z.string(),
     ])
-    .optional()
+    .nullish()
     .transform((value) => {
       if (!value) return undefined;
       return typeof value === "string" ? value : value.uri;
     });
 
-  const ProfileSchema = z.object({
-    image: imageAssetSchema,
-    username: z.string().min(1, "A username is required"),
-  });
-
+  const ProfileSchema = z
+    .object({
+      profile_image_url: imageAssetSchema,
+      username: z.string().min(1, "A username is required"),
+    })
+    .loose();
   // useStates for form data and errors
-  const [existingProfileInfo, setExistingProfileInfo] = useState({
-    username: "DonDada",
-    image: undefined,
-  });
-  const [profileInfo, setProfileInfo] = useState({
-    username: "DonDada",
-    image: undefined,
-  });
+  const [existingProfileInfo, setExistingProfileInfo] = useState({});
+  const [profileInfo, setProfileInfo] = useState({});
 
   const [errors, setErrors] = useState([]);
 
   const router = useRouter();
-
 
   // Picking Image
   const pickImage = async () => {
@@ -77,7 +72,10 @@ const EditProfile = () => {
     });
 
     if (!result.canceled) {
-      setProfileInfo((prev) => ({ ...prev, image: result.assets[0].uri }));
+      setProfileInfo((prev) => ({
+        ...prev,
+        profile_image_url: result.assets[0].uri,
+      }));
     }
   };
 
@@ -89,6 +87,9 @@ const EditProfile = () => {
       setErrors(result.error.issues.map((issue) => issue.message));
       return;
     }
+
+    console.log(result.data);
+    console.log(profileInfo);
 
     setErrors([]);
 
@@ -111,6 +112,21 @@ const EditProfile = () => {
     router.back();
   };
 
+  useEffect(() => {
+    const getProfileData = async () => {
+      const profileData = await AsyncStorage.getItem("profile_cache");
+      if (!profileData) {
+        router.push("/profile");
+        return;
+      }
+      const parsed = JSON.parse(profileData);
+      setExistingProfileInfo(parsed);
+      setProfileInfo(parsed);
+    };
+
+    getProfileData();
+  }, []);
+
   return (
     <View
       className=" gap-8 py-12 flex flex-col bg-white"
@@ -124,7 +140,9 @@ const EditProfile = () => {
         <View className="relative">
           <Image
             source={
-              profileInfo.image ? { uri: profileInfo.image } : IMAGES.user
+              profileInfo.profile_image_url
+                ? { uri: profileInfo.profile_image_url }
+                : IMAGES.user
             }
             className="w-40 h-40 rounded-full"
           />
@@ -156,7 +174,7 @@ const EditProfile = () => {
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
             readOnly
-            value="Mawuko Senyo Hayibor"
+            value={profileInfo.full_name}
           />
         </View>
         <View>
@@ -164,7 +182,7 @@ const EditProfile = () => {
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
             readOnly
-            value="user@gmail.com"
+            value={profileInfo.email}
           />
         </View>
       </View>
