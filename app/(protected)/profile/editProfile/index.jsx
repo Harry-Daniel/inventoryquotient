@@ -88,8 +88,6 @@ const EditProfile = () => {
       return;
     }
 
-    console.log(result.data);
-    console.log(profileInfo);
 
     setErrors([]);
 
