@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../../constants";
+import { IMAGES, URL } from "../../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
@@ -74,40 +74,86 @@ const EditProfile = () => {
     if (!result.canceled) {
       setProfileInfo((prev) => ({
         ...prev,
-        profile_image_url: result.assets[0].uri,
+        profile_image_url: result.assets[0],
       }));
     }
   };
+  // console.log(profileInfo);
 
-  const handleSave = () => {
-    const existingProfileResult = ProfileSchema.safeParse(existingProfileInfo);
-    const result = ProfileSchema.safeParse(profileInfo);
+  const handleSave = async () => {
+    try {
+      const existingProfileResult =
+        ProfileSchema.safeParse(existingProfileInfo);
+      const result = ProfileSchema.safeParse(profileInfo);
 
-    if (!result.success) {
-      setErrors(result.error.issues.map((issue) => issue.message));
-      return;
-    }
+      if (!result.success) {
+        setErrors(result.error.issues.map((issue) => issue.message));
+        return;
+      }
 
+      setErrors([]);
 
-    setErrors([]);
+      const isSame =
+        existingProfileResult.success &&
+        isEqual(existingProfileResult.data, result.data);
 
-    const isSame =
-      existingProfileResult.success &&
-      isEqual(existingProfileResult.data, result.data);
-
-    isSame
-      ? Toast.show({
+      if (isSame) {
+        Toast.show({
           type: "info",
           text1: "No changes detected",
           text2: "No changes were made",
-        })
-      : Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: "Changes have been saved",
         });
+        router.back();
+        return;
+      }
+      // If not the same now start Patch procresss
+      const formData = new FormData();
+      const accessToken = await AsyncStorage.getItem("access_token");
 
-    router.back();
+      formData.append("username", result.data.username);
+
+      if (
+        result.data.profile_image_url &&
+        !result.data.profile_image_url.startsWith("http")
+      ) {
+        formData.append("profile_image", {
+          uri: result.data.profile_image_url,
+          type: "image/jpeg",
+          name: "profile.jpg",
+        });
+      }
+
+      const response = await fetch(`http://${URL}/auth/users/me/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `JWT ${accessToken}`, // only this
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const badResponse = await response.json();
+        setErrors([badResponse.error]);
+        return;
+      }
+
+      setErrors([]);
+
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Changes have been saved",
+      });
+
+      router.back();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error Occured",
+        text2: "If error continues, report to support",
+      });
+      router.back();
+    }
   };
 
   useEffect(() => {
@@ -139,7 +185,12 @@ const EditProfile = () => {
           <Image
             source={
               profileInfo.profile_image_url
-                ? { uri: profileInfo.profile_image_url }
+                ? {
+                    uri:
+                      typeof profileInfo.profile_image_url === "string"
+                        ? profileInfo.profile_image_url
+                        : profileInfo.profile_image_url.uri,
+                  }
                 : IMAGES.user
             }
             className="w-40 h-40 rounded-full"
