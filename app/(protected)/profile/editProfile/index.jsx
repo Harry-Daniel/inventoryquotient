@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import { IMAGES, URL } from "../../../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useProfile } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
@@ -50,9 +51,8 @@ const EditProfile = () => {
   // useStates for form data and errors
   const [existingProfileInfo, setExistingProfileInfo] = useState({});
   const [profileInfo, setProfileInfo] = useState({});
-
   const [errors, setErrors] = useState([]);
-
+  const { profile } = useProfile();
   const router = useRouter();
 
   // Picking Image
@@ -157,18 +157,13 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    const getProfileData = async () => {
-      const profileData = await AsyncStorage.getItem("profile_cache");
-      if (!profileData) {
-        router.push("/profile");
-        return;
-      }
-      const parsed = JSON.parse(profileData);
-      setExistingProfileInfo(parsed);
-      setProfileInfo(parsed);
-    };
+    if (!profile) {
+      router.push("/profile");
+      return;
+    }
 
-    getProfileData();
+    setExistingProfileInfo(profile);
+    setProfileInfo(profile);
   }, []);
 
   return (
