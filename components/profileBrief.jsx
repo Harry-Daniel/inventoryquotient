@@ -71,9 +71,14 @@ const ProfileBrief = () => {
       </View>
       <View className="flex flex-row items-center gap-7 py-2 justify-center px-4">
         <View className="relative">
-          <Image source={
-              profile.image_url ? { uri: profile.image_url } : IMAGES.user
-            } className="w-40 h-40 rounded-full" />
+          <Image
+            source={
+              profile.profile_image_url
+                ? { uri: profile.profile_image_url }
+                : IMAGES.user
+            }
+            className="w-40 h-40 rounded-full"
+          />
         </View>
 
         <View className="w-[60%] gap-2 ">
