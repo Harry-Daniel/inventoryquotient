@@ -1,11 +1,15 @@
 import { Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
+
+import NetInfo from "@react-native-community/netinfo";
 
 import InventoryCard from "./inventoryCard";
 import { useEffect, useState } from "react";
 import { useData } from "../store/store";
 import { useRouter } from "expo-router";
 import apiFetch from "../utility/apiFetch";
+import { URL } from "../constants";
 
 const InventoryList = () => {
   const { setInventoryItems, inventoryItems, setIndexedList } = useData();
@@ -17,14 +21,54 @@ const InventoryList = () => {
       setIsLoading(true);
 
       try {
+        const netState = await NetInfo.fetch();
+
+        if (!netState.isConnected || !netState.isInternetReachable) {
+          // console.log("Offline — loading cache");
+
+          const cached = await AsyncStorage.getItem("inventory_cache");
+          // router.replace({ pathname: "/auth/signIn" });
+
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            setInventoryItems(parsed);
+            setIndexedList(parsed);
+            Toast.show({
+              type: "info",
+              text1: "Could not load current data",
+              text2: "Check your internet connection",
+            });
+          }
+
+          return;
+        }
+
         const data = await apiFetch(
-          "http://10.0.2.2:8000/inventory/items/",
+          `http://${URL}/inventory/items/`,
           router,
         );
+
+        await AsyncStorage.setItem("inventory_cache", JSON.stringify(data));
+
         setInventoryItems(data);
         setIndexedList(data);
       } catch (error) {
-        console.error("fetch failed", error);
+        Toast.show({
+          type: "error",
+          text1: "Something went wrong",
+          text2:
+            "Could not load current data. If this persists, contact support",
+        });
+        // console.error("fetch failed", error);
+        const cached = await AsyncStorage.getItem("inventory_cache");
+
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          setInventoryItems(parsed);
+          setIndexedList(parsed);
+        }
+
+        return;
       } finally {
         setIsLoading(false);
       }

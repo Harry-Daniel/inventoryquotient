@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -16,10 +16,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../../constants";
+import { IMAGES, URL } from "../../../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useProfile } from "../../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
 const EditProfile = () => {
+  // add use effect for loading profile details from cache
+
   const imageAssetSchema = z
     .union([
       z.object({
@@ -32,29 +36,23 @@ const EditProfile = () => {
       }),
       z.string(),
     ])
-    .optional()
+    .nullish()
     .transform((value) => {
       if (!value) return undefined;
       return typeof value === "string" ? value : value.uri;
     });
 
-  const ProfileSchema = z.object({
-    image: imageAssetSchema,
-    username: z.string().min(1, "A username is required"),
-  });
-
+  const ProfileSchema = z
+    .object({
+      profile_image_url: imageAssetSchema,
+      username: z.string().min(1, "A username is required"),
+    })
+    .loose();
   // useStates for form data and errors
-  const [existingProfileInfo, setExistingProfileInfo] = useState({
-    username: "DonDada",
-    image: undefined,
-  });
-  const [profileInfo, setProfileInfo] = useState({
-    username: "DonDada",
-    image: undefined,
-  });
-
+  const [existingProfileInfo, setExistingProfileInfo] = useState({});
+  const [profileInfo, setProfileInfo] = useState({});
   const [errors, setErrors] = useState([]);
-
+  const { profile } = useProfile();
   const router = useRouter();
 
   // Picking Image
@@ -74,39 +72,99 @@ const EditProfile = () => {
     });
 
     if (!result.canceled) {
-      setProfileInfo((prev) => ({ ...prev, image: result.assets[0].uri }));
+      setProfileInfo((prev) => ({
+        ...prev,
+        profile_image_url: result.assets[0],
+      }));
     }
   };
+  // console.log(profileInfo);
 
-  const handleSave = () => {
-    const existingProfileResult = ProfileSchema.safeParse(existingProfileInfo);
-    const result = ProfileSchema.safeParse(profileInfo);
+  const handleSave = async () => {
+    try {
+      const existingProfileResult =
+        ProfileSchema.safeParse(existingProfileInfo);
+      const result = ProfileSchema.safeParse(profileInfo);
 
-    if (!result.success) {
-      setErrors(result.error.issues.map((issue) => issue.message));
-      return;
-    }
+      if (!result.success) {
+        setErrors(result.error.issues.map((issue) => issue.message));
+        return;
+      }
 
-    setErrors([]);
+      setErrors([]);
 
-    const isSame =
-      existingProfileResult.success &&
-      isEqual(existingProfileResult.data, result.data);
+      const isSame =
+        existingProfileResult.success &&
+        isEqual(existingProfileResult.data, result.data);
 
-    isSame
-      ? Toast.show({
+      if (isSame) {
+        Toast.show({
           type: "info",
           text1: "No changes detected",
           text2: "No changes were made",
-        })
-      : Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: "Changes have been saved",
         });
+        router.back();
+        return;
+      }
+      // If not the same now start Patch procresss
+      const formData = new FormData();
+      const accessToken = await AsyncStorage.getItem("access_token");
 
-    router.back();
+      formData.append("username", result.data.username);
+
+      if (
+        result.data.profile_image_url &&
+        !result.data.profile_image_url.startsWith("http")
+      ) {
+        formData.append("profile_image", {
+          uri: result.data.profile_image_url,
+          type: "image/jpeg",
+          name: "profile.jpg",
+        });
+      }
+
+      const response = await fetch(`http://${URL}/auth/users/me/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `JWT ${accessToken}`, // only this
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const badResponse = await response.json();
+        setErrors([badResponse.error]);
+        return;
+      }
+
+      setErrors([]);
+
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Changes have been saved",
+      });
+
+      router.back();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error Occured",
+        text2: "If error continues, report to support",
+      });
+      router.back();
+    }
   };
+
+  useEffect(() => {
+    if (!profile) {
+      router.push("/profile");
+      return;
+    }
+
+    setExistingProfileInfo(profile);
+    setProfileInfo(profile);
+  }, []);
 
   return (
     <View
@@ -121,7 +179,14 @@ const EditProfile = () => {
         <View className="relative">
           <Image
             source={
-              profileInfo.image ? { uri: profileInfo.image } : IMAGES.user
+              profileInfo.profile_image_url
+                ? {
+                    uri:
+                      typeof profileInfo.profile_image_url === "string"
+                        ? profileInfo.profile_image_url
+                        : profileInfo.profile_image_url.uri,
+                  }
+                : IMAGES.user
             }
             className="w-40 h-40 rounded-full"
           />
@@ -153,7 +218,7 @@ const EditProfile = () => {
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
             readOnly
-            value="Mawuko Senyo Hayibor"
+            value={profileInfo.full_name}
           />
         </View>
         <View>
@@ -161,7 +226,7 @@ const EditProfile = () => {
           <TextInput
             className="border px-2 rounded-lg border-gray-400 text-gray-500"
             readOnly
-            value="user@gmail.com"
+            value={profileInfo.email}
           />
         </View>
       </View>

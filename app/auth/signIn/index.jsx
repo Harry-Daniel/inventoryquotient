@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../constants";
+import { IMAGES, URL } from "../../../constants";
 import { useAuthetication } from "../../../store/store";
 
 const { width, height } = Dimensions.get("screen");
@@ -33,10 +33,12 @@ const SignIn = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // simulating on submit
 
   const handleOnSubmit = async () => {
+    setIsLoading(true);
     const result = signInSchema.safeParse(userDetails);
 
     if (!result.success) {
@@ -45,7 +47,7 @@ const SignIn = () => {
       return;
     }
     try {
-      const response = await fetch("http://10.0.2.2:8000/auth/jwt/create/", {
+      const response = await fetch(`http://${URL}/auth/jwt/create/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,23 +55,24 @@ const SignIn = () => {
         body: JSON.stringify(result.data),
       });
 
-      const data = await response.json();
-
-      await AsyncStorage.setItem("access_token", data.access);
-      await AsyncStorage.setItem("refresh_token", data.refresh);
-      login();
-
       if (!response.ok) {
         const errorData = await response.json();
         const formattedErrors = Object.values(errorData).flat();
         setErrors(formattedErrors);
         return;
       }
+
+      const data = await response.json();
+
+      await AsyncStorage.setItem("access_token", data.access);
+      await AsyncStorage.setItem("refresh_token", data.refresh);
+      login();
     } catch (error) {
       console.error("fetch failed", error);
     }
 
     setErrors([]);
+    setIsLoading(false);
     router.replace({ pathname: "/" });
   };
 
@@ -162,7 +165,9 @@ const SignIn = () => {
           className="bg-blue-900 p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
-          <Text className="text-white m-auto">Sign In</Text>
+          <Text className="text-white m-auto">
+            {isLoading ? "Loading..." : "Sign In"}
+          </Text>
         </TouchableOpacity>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Don't have an account?</Text>

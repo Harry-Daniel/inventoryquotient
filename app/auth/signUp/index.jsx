@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { IMAGES } from "../../../constants";
+import { IMAGES, URL } from "../../../constants";
 
 const { width, height } = Dimensions.get("screen");
 const SignUp = () => {
@@ -46,6 +46,7 @@ const SignUp = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // simulating on submit
 
@@ -64,7 +65,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await fetch("http://10.0.2.2:8000/auth/users/", {
+      const response = await fetch(`http://${URL}/auth/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,13 @@ const SignUp = () => {
         return;
       }
     } catch (error) {
-      console.error("fetch failed", error);
+      Toast.show({
+        type: "error",
+        text1: `${userDetails.username} sign up failed`,
+        text2: "Try again",
+      });
+      return;
+      // console.error("fetch failed", error);
     }
 
     Toast.show({
@@ -233,7 +240,9 @@ const SignUp = () => {
           className="bg-blue-900  p-4  rounded-3xl"
           onPress={handleOnSubmit}
         >
-          <Text className="text-white m-auto">Sign Up</Text>
+          <Text className="text-white m-auto">
+            {isLoading ? "Loading..." : "Sign Up"}
+          </Text>
         </TouchableOpacity>
         <View className="mx-auto flex flex-row gap-2 -my-5">
           <Text> Already have an account?</Text>
