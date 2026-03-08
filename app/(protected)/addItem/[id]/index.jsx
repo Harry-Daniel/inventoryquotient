@@ -85,7 +85,7 @@ const AddItem = () => {
 
   const pickImage = async () => {
     // Ask permission
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permission.granted) {
@@ -109,6 +109,7 @@ const AddItem = () => {
   };
 
   const createItem = async () => {
+    setIsLoading(true);
     const result = itemSchema.safeParse(itemDetails);
     try {
       if (!result.success) {
@@ -120,6 +121,8 @@ const AddItem = () => {
               ...prev.filter((error) => error !== "Invalid input"),
               "Image is required",
             ]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -148,6 +151,8 @@ const AddItem = () => {
       if (!response.ok) {
         const badResponse = await response.json();
         setErrors([badResponse.error]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -159,7 +164,9 @@ const AddItem = () => {
         text2: `${result.data.title} added successfully`,
       });
 
+      setIsLoading(false);
       router.back();
+
       return;
     } catch (error) {
       Toast.show({
@@ -169,11 +176,15 @@ const AddItem = () => {
           ? `${result.data.title} details did not update`
           : `${result.data.title} not added`,
       });
+      setIsLoading(false);
+
       return;
     }
   };
 
   const updateItem = async () => {
+    setIsLoading(true);
+
     const existingItemResult = itemSchema.safeParse(existingItemDetails);
     const result = itemSchema.safeParse(itemDetails);
     const is_same = isEqual(existingItemResult, result);
@@ -187,6 +198,8 @@ const AddItem = () => {
               ...prev.filter((error) => error !== "Invalid input"),
               "Image is required",
             ]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -220,11 +233,15 @@ const AddItem = () => {
       if (!response.ok) {
         const badResponse = await response.json();
         setErrors([badResponse.error]);
+        setIsLoading(false);
+
         return;
       }
 
       setErrors([]);
       // console.log(result);
+      setIsLoading(false);
+
       is_same
         ? Toast.show({
             type: "info",
@@ -243,15 +260,14 @@ const AddItem = () => {
         text1: "Failed",
         text2: `${result.data.title} details did not update`,
       });
+      setIsLoading(false);
+
       return;
     }
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
-
     item ? updateItem() : createItem();
-    setIsLoading(false);
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
