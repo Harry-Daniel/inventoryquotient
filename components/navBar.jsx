@@ -68,7 +68,7 @@ const NavBar = () => {
         <View className={`relative`}>
           <View
             className={whiteBgCheckPath(profilePathname)}
-            style={{ transform: [{ scale: 2 }], top: -8 }}
+            style={{ transform: [{ scale: 2 }], top: -8 ,left:-1.5}}
           ></View>
           <TouchableOpacity
             onPress={() => handlePress(profilePathname)}
