@@ -61,10 +61,14 @@ const SignUp = () => {
     if (!result.success) {
       const errorMessages = result.error.issues.map((issue) => issue.message);
       setErrors(errorMessages);
+      setIsLoading(false);
+
       return;
     }
     if (!isChecked) {
       setErrors(["You must agree to processing of data"]);
+      setIsLoading(false);
+
       return;
     }
 
@@ -81,6 +85,8 @@ const SignUp = () => {
         const errorData = await response.json();
         const formattedErrors = Object.values(errorData).flat();
         setErrors(formattedErrors);
+        setIsLoading(false);
+
         return;
       }
     } catch (error) {
@@ -89,6 +95,8 @@ const SignUp = () => {
         text1: `${userDetails.username} sign up failed`,
         text2: "Try again",
       });
+      setIsLoading(false);
+
       return;
       // console.error("fetch failed", error);
     }
