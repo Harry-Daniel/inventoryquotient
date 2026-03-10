@@ -53,12 +53,14 @@ const EditProfile = () => {
   // useStates for form data and errors
   const [existingProfileInfo, setExistingProfileInfo] = useState({});
   const [profileInfo, setProfileInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const { profile } = useProfile();
   const router = useRouter();
 
   // Picking Image
   const pickImage = async () => {
+    Keyboard.dismiss();
     // Ask permission
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -83,6 +85,7 @@ const EditProfile = () => {
   // console.log(profileInfo);
 
   const handleSave = async () => {
+    setIsLoading(true);
     Keyboard.dismiss();
     try {
       const existingProfileResult =
@@ -157,6 +160,7 @@ const EditProfile = () => {
       });
       router.back();
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -238,7 +242,9 @@ const EditProfile = () => {
               onPress={handleSave}
               className="bg-blue-950 flex text-center py-3 my-[8%] "
             >
-              <Text className="text-white text-center">Save</Text>
+              <Text className="text-white text-center">
+                {isLoading ? "Saving..." : "Save"}
+              </Text>
             </TouchableOpacity>
           </View>
           <View
