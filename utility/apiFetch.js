@@ -30,7 +30,7 @@ const apiFetch = async (fetchUrl, router, options = {}) => {
     }
 
     const refreshResponse = await fetch(
-      `http://${URL}/auth/jwt/refresh/`,
+      `${URL}/auth/jwt/refresh/`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

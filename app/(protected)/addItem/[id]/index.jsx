@@ -140,7 +140,7 @@ const AddItem = () => {
         });
       }
 
-      const response = await fetch(`http://${URL}/inventory/items/`, {
+      const response = await fetch(`${URL}/inventory/items/`, {
         method: "POST",
         headers: {
           Authorization: `JWT ${accessToken}`, // only this
@@ -220,7 +220,7 @@ const AddItem = () => {
       }
 
       const response = await fetch(
-        `http://${URL}/inventory/items/${item.id}/`,
+        `${URL}/inventory/items/${item.id}/`,
         {
           method: "PATCH",
           headers: {

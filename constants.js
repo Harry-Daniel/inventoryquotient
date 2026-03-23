@@ -6,6 +6,6 @@ export const IMAGES = {
   hero: require("./assets/images/hero.jpg"),
 };
 
-export const URL =
-  // "192.168.100.43:8000"; //For Expo Go on physical device unto home wifi
-  "10.0.2.2:8000"; //For Emulator on PC
+export const URL = "https://inventoryquotient.onrender.com"; //Connected to the web
+// "http://192.168.100.43:8000"; //For Expo Go on physical device unto home wifi
+// "http://10.0.2.2:8000"; //For Emulator on PC

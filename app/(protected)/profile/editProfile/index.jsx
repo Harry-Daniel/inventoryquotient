@@ -129,7 +129,7 @@ const EditProfile = () => {
         });
       }
 
-      const response = await fetch(`http://${URL}/auth/users/me/`, {
+      const response = await fetch(`${URL}/auth/users/me/`, {
         method: "PATCH",
         headers: {
           Authorization: `JWT ${accessToken}`, // only this
