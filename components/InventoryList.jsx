@@ -44,7 +44,7 @@ const InventoryList = () => {
         }
 
         const data = await apiFetch(
-          `http://${URL}/inventory/items/`,
+          `${URL}/inventory/items/`,
           router,
         );
 
