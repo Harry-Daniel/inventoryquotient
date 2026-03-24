@@ -12,6 +12,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
   View,
 } from "react-native";
 import { useData } from "../../../../store/store";
@@ -83,6 +85,7 @@ const AddItem = () => {
 
   const pickImage = async () => {
     // Ask permission
+    Keyboard.dismiss();
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permission.granted) {
@@ -106,6 +109,7 @@ const AddItem = () => {
   };
 
   const createItem = async () => {
+    setIsLoading(true);
     const result = itemSchema.safeParse(itemDetails);
     try {
       if (!result.success) {
@@ -117,6 +121,8 @@ const AddItem = () => {
               ...prev.filter((error) => error !== "Invalid input"),
               "Image is required",
             ]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -134,7 +140,7 @@ const AddItem = () => {
         });
       }
 
-      const response = await fetch(`http://${URL}/inventory/items/`, {
+      const response = await fetch(`${URL}/inventory/items/`, {
         method: "POST",
         headers: {
           Authorization: `JWT ${accessToken}`, // only this
@@ -145,6 +151,8 @@ const AddItem = () => {
       if (!response.ok) {
         const badResponse = await response.json();
         setErrors([badResponse.error]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -156,7 +164,9 @@ const AddItem = () => {
         text2: `${result.data.title} added successfully`,
       });
 
+      setIsLoading(false);
       router.back();
+
       return;
     } catch (error) {
       Toast.show({
@@ -166,11 +176,15 @@ const AddItem = () => {
           ? `${result.data.title} details did not update`
           : `${result.data.title} not added`,
       });
+      setIsLoading(false);
+
       return;
     }
   };
 
   const updateItem = async () => {
+    setIsLoading(true);
+
     const existingItemResult = itemSchema.safeParse(existingItemDetails);
     const result = itemSchema.safeParse(itemDetails);
     const is_same = isEqual(existingItemResult, result);
@@ -184,6 +198,8 @@ const AddItem = () => {
               ...prev.filter((error) => error !== "Invalid input"),
               "Image is required",
             ]);
+        setIsLoading(false);
+
         return;
       }
 
@@ -204,7 +220,7 @@ const AddItem = () => {
       }
 
       const response = await fetch(
-        `http://${URL}/inventory/items/${item.id}/`,
+        `${URL}/inventory/items/${item.id}/`,
         {
           method: "PATCH",
           headers: {
@@ -217,11 +233,15 @@ const AddItem = () => {
       if (!response.ok) {
         const badResponse = await response.json();
         setErrors([badResponse.error]);
+        setIsLoading(false);
+
         return;
       }
 
       setErrors([]);
       // console.log(result);
+      setIsLoading(false);
+
       is_same
         ? Toast.show({
             type: "info",
@@ -240,133 +260,124 @@ const AddItem = () => {
         text1: "Failed",
         text2: `${result.data.title} details did not update`,
       });
+      setIsLoading(false);
+
       return;
     }
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
-
     item ? updateItem() : createItem();
-    setIsLoading(false);
   };
   return (
-    <View
-      className=" gap-12 py-12 flex flex-col bg-white"
-      style={{ width: width, height: height }}
-    >
-      <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2 ">
-        Add Item
-      </Text>
-      {/* Title of item */}
-      <View className="px-[4%]">
-        <View className="relative">
-          <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
-            <Text className="text-xs font-bold">Title</Text>
-          </View>
-          <TextInput
-            value={itemDetails.title}
-            onChangeText={(text) =>
-              setItemDetails((prev) => ({ ...prev, title: text }))
-            }
-            placeholder="Enter item name"
-            placeholderTextColor="#4b5563"
-            autoCapitalize="none"
-            autoCorrect={true}
-            className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
-          />
-        </View>
-      </View>
-
-      {/* Quantity of item */}
-      <View className="px-[4%]">
-        <View className="relative">
-          <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
-            <Text className="text-xs font-bold">Quantity</Text>
-          </View>
-          <TextInput
-            value={itemDetails.quantity}
-            onChangeText={(text) =>
-              setItemDetails((prev) => ({ ...prev, quantity: text }))
-            }
-            placeholder="Enter quantity"
-            placeholderTextColor="#4b5563"
-            className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
-            keyboardType="numeric"
-          />
-        </View>
-      </View>
-
-      {/* Storage Location of item */}
-      <View className="px-[4%]">
-        <View className="relative">
-          <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
-            <Text className="text-xs font-bold">Storage Location</Text>
-          </View>
-          <TextInput
-            value={itemDetails.storagePlace}
-            onChangeText={(text) =>
-              setItemDetails((prev) => ({ ...prev, storagePlace: text }))
-            }
-            placeholder="Enter storage location"
-            placeholderTextColor="#4b5563"
-            autoCapitalize="none"
-            autoCorrect={true}
-            textAlignVertical="top"
-            className="border rounded-lg border-gray-400 focus:border-gray-600  text-wrap"
-          />
-        </View>
-      </View>
-
-      {/* Image Picker */}
-      <TouchableOpacity
-        onPress={pickImage}
-        className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View
+        className=" gap-12 py-12 flex flex-col bg-white"
+        style={{ width: width, height: height }}
       >
-        {/* if item exists and we are in edit screen displays only uri as default. if in create screen, displays uri element of image object */}
-        {itemDetails.image && (
-          <Image
-            source={{ uri: item ? itemDetails.image : itemDetails.image.uri }}
-            className="w-full h-72 rounded-lg"
-            resizeMode="cover"
-          />
-        )}
-        <Text className="text-white bg-[#00000050] py-2 px-3 rounded-xl absolute left-[35%] top-[35%] z-10">
-          {itemDetails.image ? "Change Image" : "Pick an Image"}
+        <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2 ">
+          Add Item
         </Text>
-      </TouchableOpacity>
-
-      <View>
+        {/* Title of item */}
         <View className="px-[4%]">
-          <TouchableOpacity
-            onPress={handleSubmit}
-            className="bg-blue-950 flex text-center py-3 my-[8%] "
-          >
-            <Text className="text-white text-center">
-              {isLoading ? "Saving..." : "Save"}
-            </Text>
-          </TouchableOpacity>
+          <View className="relative">
+            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
+              <Text className="text-xs font-bold">Title</Text>
+            </View>
+            <TextInput
+              value={itemDetails.title}
+              onChangeText={(text) =>
+                setItemDetails((prev) => ({ ...prev, title: text }))
+              }
+              placeholder="Enter item name"
+              placeholderTextColor="#4b5563"
+              autoCapitalize="none"
+              autoCorrect={true}
+              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
+            />
+          </View>
         </View>
-        {errors.length === 0 && !item && (
-          <Text className="text-red-600 text-center">
-            {" "}
-            The item should not already exist in inventory. Add only
-            <Text className="font-bold"> New </Text>items only
-          </Text>
-        )}
-        <View
-          className="flex gap-2 justify-center items-center
-        "
+        {/* Quantity of item */}
+        <View className="px-[4%]">
+          <View className="relative">
+            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
+              <Text className="text-xs font-bold">Quantity</Text>
+            </View>
+            <TextInput
+              value={itemDetails.quantity}
+              onChangeText={(text) =>
+                setItemDetails((prev) => ({ ...prev, quantity: text }))
+              }
+              placeholder="Enter quantity"
+              placeholderTextColor="#4b5563"
+              className="border rounded-lg border-gray-400 focus:border-gray-600  p-2"
+              keyboardType="numeric"
+            />
+          </View>
+        </View>
+        {/* Storage Location of item */}
+        <View className="px-[4%]">
+          <View className="relative">
+            <View className=" bg-white w-auto h-auto px-1.5 translate-x-4  z-10 -translate-y-2.5 absolute">
+              <Text className="text-xs font-bold">Storage Location</Text>
+            </View>
+            <TextInput
+              value={itemDetails.storagePlace}
+              onChangeText={(text) =>
+                setItemDetails((prev) => ({ ...prev, storagePlace: text }))
+              }
+              placeholder="Enter storage location"
+              placeholderTextColor="#4b5563"
+              autoCapitalize="none"
+              autoCorrect={true}
+              textAlignVertical="top"
+              className="border rounded-lg border-gray-400 focus:border-gray-600  text-wrap"
+            />
+          </View>
+        </View>
+        {/* Image Picker */}
+        <TouchableOpacity
+          onPress={pickImage}
+          className="flex border border-dashed border-gray-400 h-72 rounded-lg justify-center items-center relative "
         >
-          {errors.length > 0 &&
-            errors.map((error, index) => (
-              <Text className="text-red-600" key={index}>
-                {error}
+          {/* if item exists and we are in edit screen displays only uri as default. if in create screen, displays uri element of image object */}
+          {itemDetails.image && (
+            <Image
+              source={{ uri: item ? itemDetails.image : itemDetails.image.uri }}
+              className="w-full h-72 rounded-lg"
+              resizeMode="cover"
+            />
+          )}
+          <Text className="text-white bg-[#00000050] py-2 px-3 rounded-xl absolute left-[35%] top-[35%] z-10">
+            {itemDetails.image ? "Change Image" : "Pick an Image"}
+          </Text>
+        </TouchableOpacity>
+        <View>
+          <View className="px-[4%]">
+            <TouchableOpacity
+              onPress={handleSubmit}
+              className="bg-blue-950 flex text-center py-3 my-[8%] "
+            >
+              <Text className="text-white text-center">
+                {isLoading ? "Saving..." : "Save"}
               </Text>
-            ))}
+            </TouchableOpacity>
+          </View>
+
+          <View
+            className="flex gap-2 justify-center items-center
+          "
+          >
+            {errors.length > 0 &&
+              errors.map((error, index) => (
+                <Text className="text-red-600" key={index}>
+                  {error}
+                </Text>
+              ))}
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

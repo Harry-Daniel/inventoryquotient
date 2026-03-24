@@ -1,4 +1,11 @@
-import { Dimensions, StyleSheet, TextInput, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  TextInput,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Categories from "../../components/categories";
 import HeroImage from "../../components/heroImage";
 import InventoryList from "../../components/InventoryList";
@@ -8,22 +15,24 @@ const { width, height } = Dimensions.get("screen");
 const Home = () => {
   return (
     <View style={{ width: width, height: height }} className="bg-white">
-      <View className="flex flex-col my-16 gap-4 bg-gray-100 h-[100vh]">
-        <HeroImage />
-        <View className="flex items-center justify-center">
-          <TextInput
-            placeholder="search"
-            placeholderTextColor="#4b5563"
-            autoCapitalize="none"
-            autoCorrect={true}
-            className="border rounded-lg border-gray-500 focus:border-blue-950  w-[80%] py-0.5 pl-4 text-black"
-          />
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View className="flex flex-col my-16 gap-4 bg-gray-100 h-[100vh]">
+          <HeroImage />
+          <View className="flex items-center justify-center">
+            <TextInput
+              placeholder="search"
+              placeholderTextColor="#4b5563"
+              autoCapitalize="none"
+              autoCorrect={true}
+              className="border rounded-lg border-gray-500 focus:border-blue-950  w-[80%] py-0.5 pl-4 text-black"
+            />
+          </View>
+
+          {/* <Categories /> */}
+
+          <InventoryList />
         </View>
-
-        {/* <Categories /> */}
-
-        <InventoryList />
-      </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

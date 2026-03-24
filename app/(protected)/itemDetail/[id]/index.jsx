@@ -112,14 +112,14 @@ const ItemDetail = () => {
         <Text className="leading-6">{item.description}</Text>
         {/* Last Updated */}
         <View className="absolute bottom-32 left-[7%] w-full px-4 gap-8">
-          <View className="flex flex-row gap-6 items-center">
+          {/* <View className="flex flex-row gap-6 items-center">
             <Image source={IMAGES.hero} className="w-20 h-20 rounded-full" />
             <View className="">
               <Text className="text-xs">Last Updated By:</Text>
               <Text className="font-bold">Pookie</Text>
               <Text className="text-xs">21/02/2025</Text>
             </View>
-          </View>
+          </View> */}
           <View className="gap-2 flex">
             <TouchableOpacity
               className="bg-blue-300  rounded-full py-4 "

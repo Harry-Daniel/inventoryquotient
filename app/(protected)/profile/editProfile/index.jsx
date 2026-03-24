@@ -14,6 +14,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
   View,
 } from "react-native";
 import { IMAGES, URL } from "../../../../constants";
@@ -51,12 +53,14 @@ const EditProfile = () => {
   // useStates for form data and errors
   const [existingProfileInfo, setExistingProfileInfo] = useState({});
   const [profileInfo, setProfileInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const { profile } = useProfile();
   const router = useRouter();
 
   // Picking Image
   const pickImage = async () => {
+    Keyboard.dismiss();
     // Ask permission
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -81,6 +85,8 @@ const EditProfile = () => {
   // console.log(profileInfo);
 
   const handleSave = async () => {
+    setIsLoading(true);
+    Keyboard.dismiss();
     try {
       const existingProfileResult =
         ProfileSchema.safeParse(existingProfileInfo);
@@ -123,7 +129,7 @@ const EditProfile = () => {
         });
       }
 
-      const response = await fetch(`http://${URL}/auth/users/me/`, {
+      const response = await fetch(`${URL}/auth/users/me/`, {
         method: "PATCH",
         headers: {
           Authorization: `JWT ${accessToken}`, // only this
@@ -154,6 +160,7 @@ const EditProfile = () => {
       });
       router.back();
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -167,91 +174,93 @@ const EditProfile = () => {
   }, []);
 
   return (
-    <View
-      className=" gap-8 py-12 flex flex-col bg-white"
-      style={{ width: width, height: height }}
-    >
-      <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
-        Edit Profile
-      </Text>
-
-      <View className="relative justify-center items-center mx-auto">
-        <View className="relative">
-          <Image
-            source={
-              profileInfo.profile_image_url
-                ? {
-                    uri:
-                      typeof profileInfo.profile_image_url === "string"
-                        ? profileInfo.profile_image_url
-                        : profileInfo.profile_image_url.uri,
-                  }
-                : IMAGES.user
-            }
-            className="w-40 h-40 rounded-full"
-          />
-          <TouchableOpacity
-            onPress={pickImage}
-            className="absolute bottom-0 right-4 bg-white p-2 rounded-full shadow-md elevation-md shadow-black"
-          >
-            <AntDesign name="camera" size={16} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View className="px-[4%] gap-8">
-        <View>
-          <View className="flex flex-row items-center">
-            <Text className=" font-semibold text-xl">Username </Text>
-            <Text className="text-gray-500">(editable)</Text>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View
+        className=" gap-8 py-12 flex flex-col bg-white"
+        style={{ width: width, height: height }}
+      >
+        <Text className="text-gray-500 text-center font-bold border-b border-b-gray-500 py-2">
+          Edit Profile
+        </Text>
+        <View className="relative justify-center items-center mx-auto">
+          <View className="relative">
+            <Image
+              source={
+                profileInfo.profile_image_url
+                  ? {
+                      uri:
+                        typeof profileInfo.profile_image_url === "string"
+                          ? profileInfo.profile_image_url
+                          : profileInfo.profile_image_url.uri,
+                    }
+                  : IMAGES.user
+              }
+              className="w-40 h-40 rounded-full"
+            />
+            <TouchableOpacity
+              onPress={pickImage}
+              className="absolute bottom-0 right-4 bg-white p-2 rounded-full shadow-md elevation-md shadow-black"
+            >
+              <AntDesign name="camera" size={16} color="black" />
+            </TouchableOpacity>
           </View>
-          <TextInput
-            className="border px-2 rounded-lg border-gray-400 text-gray-500"
-            value={profileInfo.username}
-            onChangeText={(text) =>
-              setProfileInfo((prev) => ({ ...prev, username: text }))
-            }
-          />
+        </View>
+        <View className="px-[4%] gap-8">
+          <View>
+            <View className="flex flex-row items-center">
+              <Text className=" font-semibold text-xl">Username </Text>
+              <Text className="text-gray-500">(editable)</Text>
+            </View>
+            <TextInput
+              className="border px-2 rounded-lg border-gray-400 text-gray-500"
+              value={profileInfo.username}
+              onChangeText={(text) =>
+                setProfileInfo((prev) => ({ ...prev, username: text }))
+              }
+            />
+          </View>
+          <View>
+            <Text className=" font-semibold text-xl">Fullname</Text>
+            <TextInput
+              className="border px-2 rounded-lg border-gray-400 text-gray-500"
+              readOnly
+              value={profileInfo.full_name}
+            />
+          </View>
+          <View>
+            <Text className=" font-semibold text-xl">Email address</Text>
+            <TextInput
+              className="border px-2 rounded-lg border-gray-400 text-gray-500"
+              readOnly
+              value={profileInfo.email}
+            />
+          </View>
         </View>
         <View>
-          <Text className=" font-semibold text-xl">Fullname</Text>
-          <TextInput
-            className="border px-2 rounded-lg border-gray-400 text-gray-500"
-            readOnly
-            value={profileInfo.full_name}
-          />
-        </View>
-        <View>
-          <Text className=" font-semibold text-xl">Email address</Text>
-          <TextInput
-            className="border px-2 rounded-lg border-gray-400 text-gray-500"
-            readOnly
-            value={profileInfo.email}
-          />
-        </View>
-      </View>
-      <View>
-        <View className="px-[4%]">
-          <TouchableOpacity
-            onPress={handleSave}
-            className="bg-blue-950 flex text-center py-3 my-[8%] "
-          >
-            <Text className="text-white text-center">Save</Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          className="flex gap-2 justify-center items-center
-        "
-        >
-          {errors.length > 0 &&
-            errors.map((error, index) => (
-              <Text className="text-red-600" key={index}>
-                {error}
+          <View className="px-[4%]">
+            <TouchableOpacity
+              onPress={handleSave}
+              className="bg-blue-950 flex text-center py-3 my-[8%] "
+            >
+              <Text className="text-white text-center">
+                {isLoading ? "Saving..." : "Save"}
               </Text>
-            ))}
+            </TouchableOpacity>
+          </View>
+          <View
+            className="flex gap-2 justify-center items-center
+          "
+          >
+            {errors.length > 0 &&
+              errors.map((error, index) => (
+                <Text className="text-red-600" key={index}>
+                  {error}
+                </Text>
+              ))}
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

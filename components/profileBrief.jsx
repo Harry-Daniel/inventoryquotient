@@ -37,7 +37,7 @@ const ProfileBrief = () => {
           return;
         }
 
-        const data = await apiFetch(`http://${URL}/auth/users/me/`, router);
+        const data = await apiFetch(`${URL}/auth/users/me/`, router);
 
         setProfile(data);
         await AsyncStorage.setItem("profile_cache", JSON.stringify(data));

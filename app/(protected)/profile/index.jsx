@@ -22,7 +22,7 @@ const Profile = () => {
       className=" gap-6 py-12 flex flex-col bg-white"
       style={{ width: width, height: height }}
     >
-      <View className="shadow-black shadow-sm bg-white elevation-md h-[98%] rounded-b-[4rem] gap-2">
+      <View className=" bg-white  gap-2">
         <ProfileBrief />
         <ProfileMenu />
       </View>
