@@ -21,7 +21,11 @@ A mobile inventory management app built with Expo and React Native. Sign in, bro
 
 ## Backend
 
-The app talks to a separate REST API (Djoser-style JWT auth) that exposes:
+The app talks to a separate REST API (Djoser-style JWT auth).
+
+> **Note:** This backend was deployed on Render at `https://inventoryquotient.onrender.com`. That link no longer works: the app ran on a free-tier database instance, which is now down.
+
+The API exposes:
 
 | Endpoint                   | Purpose                      |
 | -------------------------- | ---------------------------- |
