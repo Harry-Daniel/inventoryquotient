@@ -2,6 +2,8 @@
 
 A mobile inventory management app built with Expo and React Native. Sign in, browse your stock, add and edit items with photos, and keep a personal restock list of things that are running low.
 
+**[Watch the demo video](https://drive.google.com/file/d/1yOaL2RrSroLBJy49cayzGYcRzry4Sbrq/view)**
+
 ## Features
 
 - **Accounts** – sign up, sign in, and stay signed in with JWT access/refresh tokens
